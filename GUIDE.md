@@ -14,7 +14,7 @@ argumentation.
 | | |
 |---|---|
 | Repository | `maelic13/colosseum-gui`, seeded from the CLI repository at its step 11.2 (`docs/gui-v2/`); takes `maelic13/colosseum` in the swap before both releases (PLAN §G8). Work on `dev`, merged into `master` by one pull request after the swap. No code yet |
-| Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22. It stays on the CLI repository's `main`, patchable, until the merge; it leaves the CLI repository's `dev` once 1.1 has read it (CLI 11.2.1) |
+| Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22. It stays on the CLI repository's `main`, patchable, until the merge; it left the CLI repository's `dev` at CLI 11.2.1 (2026-09-29), and 1.x is read at commit `ba30829` |
 | What is missing | Everything: Phase 1 (design foundations), Phase 2 (repository and technology proof), Phase 3 (screen specifications), Phase 4 (implementation), Phase 5 (release) |
 | Depends on Colosseum | 11.4 protocol specification (before Phase 3), 13.2 synthetic streams (before 2.3), 13.3–13.4 (before 4.5; the lifecycle decision with 4.2), 13.5–13.7 (before 4.6), 13.8 release candidate (4.8) — PLAN §G9 joint milestones |
 | Next step | **1.2** — requirements, reviewed with the 1.1 inventory draft and its questions — `R2` (Claude Opus 5 — High). **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
