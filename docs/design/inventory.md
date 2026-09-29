@@ -58,7 +58,7 @@ live apart, and the Arena stacks four concerns into one screen.
 | ENG-07 | Filter | Word-wise AND over name, version, author, file name | keep | |
 | ENG-08 | Selection | Click edits; Ctrl-click toggles; Shift-click ranges in visible order; right-click selects and opens the menu; click outside clears | change | Ctrl is used on macOS too; use the platform modifier |
 | ENG-09 | Context menu | Clone, Re-detect (n), Open containing folder(s), Copy path, Delete (n)… | keep | |
-| ENG-10 | Delete All | Inline two-step Confirm/Cancel, removes every engine and every logo | decide | §12 |
+| ENG-10 | Delete All | Inline two-step Confirm/Cancel, removes every engine and every logo | drop | Decided 2026-09-29 (1.1.1): select all, then Delete (n)… (PR-08) |
 | ENG-11 | Delete | Modal naming the engines; "The executable on disk is not touched"; logos removed | keep | |
 | ENG-12 | Identity fields | Name, Version, Author, Elo (optional integer) | change | Invalid Elo text is silently stored as unrated while the field still shows it; validate visibly |
 | ENG-13 | Logo | Click the slot to choose (png, jpg, webp, bmp, gif, ico); copied into app data; aspect-fitted, never cropped; Remove | keep | The old file is deleted before the copy, so a failed copy leaves no logo; order it the other way |
@@ -354,9 +354,9 @@ analysis. Answers are dated in the table when taken.
 
 | ID | Step | Question | Answer |
 |---|---|---|---|
-| ENG-10 | 1.1.1 | Delete All: keep behind a modal, or drop? | |
-| ENG-19 | 1.1.1 | Clone keeps the same "name version", which is ambiguous in PGN and standings. Keep, or require a distinct version? | |
-| ENG-23 | 1.1.1 | Should the library rating show where it came from (typed or a tournament's) and keep a history? | |
+| ENG-10 | 1.1.1 | Delete All: keep behind a modal, or drop? | Dropped (2026-09-29): select all, then Delete (n)… |
+| ENG-19 | 1.1.1 | Clone keeps the same "name version", which is ambiguous in PGN and standings. Keep, or require a distinct version? | Redesign (2026-09-29): a new naming and versioning system for the library, the clone rule derived from it; options below |
+| ENG-23 | 1.1.1 | Should the library rating show where it came from (typed or a tournament's) and keep a history? | Redesign (2026-09-29): several ratings per engine, by time control; options below |
 | TRN-06 | 1.1.2 | Offer gauntlets with more than one seed? | |
 | TRN-21 | 1.1.2 | Keep an optional PGN file outside the run directory, appended as games end, beside the export? | |
 | TRN-22 | 1.1.2 | Should a preset also carry the engine selection and the overrides? | |
@@ -369,71 +369,118 @@ analysis. Answers are dated in the table when taken.
 | APP-22 | 1.1.4 | Refuse a second instance on the same data? | |
 | APP-23 | 1.1.4 | Keep the machine awake during a run; notify when a tournament finishes; progress on the taskbar or Dock? | |
 
-**Options for 1.1.1** (drafted 2026-09-29; the answer goes into the table
+**Options for 1.1.1** (drafted 2026-09-29; each answer goes into the table
 above, dated, and into `requirements.md`)
 
-*ENG-10 Delete All.* In 1.x a danger-tinted "Delete All" sits in the
-library header whenever the library has an engine; a second click on the
-inline Confirm removes every engine and every logo. The confirmation names
-neither the engines nor their count, unlike Delete (ENG-11).
+*ENG-10 Delete All* — decided 2026-09-29: dropped. Select all (ENG-24) and
+then Delete (n)… reach the same result through the one confirmation
+pattern (PR-08), which names the engines.
 
-- (a) Drop it. Select all (added by ENG-24) and then Delete (n)… gives the
-  same result through the one confirmation pattern (PR-08), which names the
-  engines. A rare destructive action no longer sits in a permanent header.
-- (b) Keep it in the library's menu, confirmed by the ENG-11 modal with the
-  count.
-- (c) Keep 1.x's inline two-step. It breaks PR-08's one pattern.
+*ENG-19 Names and versions* — the maintainer asked on 2026-09-29 for a new
+system rather than a clone rule; the clone rule follows from the system.
 
-Recommended: (a).
+1.x keeps one flat entry per configured executable, with free-text name,
+version (split from `id name`, ENG-05) and author, and "name version" as
+the engine's only name (PR-01). Nothing groups the versions of one engine.
+Add and Scan refuse a second "name version" (ENG-04), but Clone keeps it on
+purpose (the source says a "(copy)" suffix "would only pollute PGN tags and
+standings"), and the CLI does not refuse two equal labels, so a tournament
+with both writes the same `White` / `Black` name into the PGN and two
+identical rows into the standings. The system has to serve:
 
-*ENG-19 Clone.* 1.x copies every field and the logo under a new identity
-and keeps the name and version on purpose (the source says a "(copy)"
-suffix "would only pollute PGN tags and standings"). Add and Scan refuse a
-second entry with the same name and version (ENG-04), so Clone is the only
-way to a duplicate. The CLI does not refuse two equal labels, so a
-tournament with both writes the same `White` / `Black` name into the PGN
-and two identical rows into the standings, where "name version" is the
-engine's only name (PR-01). A clone is typically the same executable with
-other options (a strength limit, more threads), which is exactly the
-difference the results must show.
+- one engine across releases (Stockfish 16, 17, 17.1; a Rarog release and
+  its development builds): comparing versions is the main testing workflow;
+- several builds of one release (avx2 and bmi2, native and PGO);
+- one executable under several configurations (a strength limit, an
+  experimental option): what Clone was used for;
+- a unique, readable label in the PGN, standings and every list;
+- 200 entries in one list (PLAN §G5), Add, Scan and the 1.x import.
 
-- (a) "name version" is unique in the library. The clone is created with a
-  suffixed version (" (2)", " (3)", …) and opens with the version field
-  selected; an edit that would collide is refused at the field. ENG-04's
-  rule and this one become a single library invariant, which the 1.x
-  import also applies (suffixing any 1.x duplicates, and saying so).
-- (b) Duplicates allowed in the library; tournament setup refuses two
-  participants with the same "name version".
-- (c) 1.x as it is.
+Options:
 
-Recommended: (a). One rule instead of two; the suffix is visible and
-editable, so nothing reaches a PGN that the user did not see. (b) moves the
-problem to the moment the user wants to start.
+- (a) **Three levels.** An *engine* (name, author, logo) holds *versions*
+  (version text, executable, launch settings, detected options; unique
+  within the engine), and each version holds *profiles* (a name and option
+  values on top of the version's). Every version has an unnamed default
+  profile. What plays and is rated is a profile, labelled "Stockfish 17.1",
+  or "Stockfish 17.1 · Skill 5" for a named one. Add and Scan file an
+  executable under the engine its `id name` matches, as a new version; a
+  build of an existing version is offered a build suffix ("17.1 bmi2").
+  Clone becomes *New profile* (same executable) or *New version* (another
+  executable). Unique by construction at every level; re-detect and a
+  moved executable are handled once per version.
+- (b) **Two levels.** An *engine* (name, author, logo) holds *variants*,
+  each with a version, an optional label, its own executable, launch
+  settings and options; version and label together are unique within the
+  engine. Clone is *New variant* with the label to fill. Simpler, but
+  variants never share an executable, so a replaced executable is edited in
+  each variant.
+- (c) **Flat, with a label.** 1.x's entries plus a label field; name,
+  version and label together are unique in the library. Least change; no
+  grouping, and the logo and author are repeated per entry.
 
-*ENG-23 Library rating.* 1.x keeps one optional integer per engine, typed in
-the editor or overwritten, rounded, after every finished game by the
-writeback. Nothing records which of the two set it, when, or what it was
-before; a typed value is silently replaced by the next game (and DEF-03 does
-the reverse). Under PLAN §G2 the library rating seeds every tournament and
-receives the CLI's figure after every scored game, so it is the product's
-long-term memory of an engine's strength, and the only figure the run
-directories cannot give back once it is overwritten.
+Recommended: (a). A profile is what a clone was for, without copying the
+executable's settings; the default profile keeps the common case at "name
+version"; and grouping by engine gives the version-to-version rating
+history that testing is about. The run file records the library's own
+identifiers beside each label, so writeback never depends on the label.
+The 1.x import groups entries by name; equal "name version" entries become
+profiles of one version when they share an executable, builds with a suffix
+when they do not, and the import reports every one.
 
-- (a) Provenance and history. Each engine keeps a log of rating entries:
-  the value, the CLI's ± where it gave one, the source (typed, a tournament
-  by name, or the 1.x import) and the date. The per-game writebacks of one
-  tournament update that tournament's single entry, not one entry per game.
-  The library shows the latest value with its source ("2950 ± 18 · Blitz
-  gauntlet, 29 Sep"); the engine's detail shows the history.
-- (b) Provenance only: the latest value with its source and date.
-- (c) 1.x: the number alone.
+*ENG-23 Ratings by time control* — the maintainer asked on 2026-09-29 for
+a new system with several ratings per engine, by time control.
 
-Recommended: (a). It is this application's own data, not a derived
-statistic (those stay the CLI's), and small: one entry per tournament per
-engine whose rating it wrote. It also settles two later questions cheaply:
-ARN-05 (1.1.3) can revert a deleted tournament's entry when nothing later
-superseded it, and APP-15 (1.1.4) can see that a typed value landed during
-a run. (b) serves the display but leaves both to guesswork.
+1.x keeps one optional integer per engine, typed or overwritten after every
+finished game by the writeback, with no record of which, when, or what it
+was before (and DEF-03 overwrites the writeback in turn). One number mixes
+results that do not compare: strength depends on the time control and on
+the threads (Rarog's pool measures 1 and 4 threads apart), and a seed from
+the wrong conditions misleads the CLI's prior. The system has to settle
+what a rating belongs to, how a tournament picks the rating it reads and
+writes, how the library shows several numbers, and what each rating
+remembers.
+
+What a rating belongs to — options:
+
+- (a) **Rating lists the user defines.** A list is a name and its
+  conditions: a time-control range by estimated game length (TRN-12's
+  estimate) or a fixed kind (nodes, depth, time per move), and optionally
+  the threads. The library starts with a default set (for instance Bullet,
+  Blitz, Rapid, Long, Fixed nodes, Fixed depth; thresholds settled at 1.2).
+  A tournament reads its seeds from, and writes back into, the list its
+  conditions match; setup shows which, and the user can pick another list
+  or none.
+- (b) **Fixed classes** by estimated game length, as rating sites do, with
+  thresholds scaled to engine play; nothing to define, but threads are not
+  a dimension and the thresholds are a guess made once for every user.
+- (c) **One rating per exact time control** ("3+0.03", "10+0.1", "100 ms per
+  move"), created as they are played. Precise, but 3+0.03 and 3+0.02 never
+  meet.
+
+Recommended: (a). It is how rating lists are kept (a list per time control
+and CPU count) and how the maintainer's own pools are run; the thresholds
+are the user's, not a guess.
+
+Around it, whichever option is chosen:
+
+- **Provenance and history per rating.** Each rating keeps its entries:
+  value, the CLI's ± where it gave one, source (typed, a tournament by name,
+  the 1.x import) and date; a tournament's per-game writebacks update its
+  one entry. This lets ARN-05 (1.1.3) revert a deleted tournament's entry
+  when nothing later superseded it, and APP-15 (1.1.4) see a typed value
+  landing during a run.
+- **Display.** The library shows one list at a time, chosen there and
+  remembered, and sorts by it; an engine unrated in it shows "—". The
+  engine's detail shows every list with its history.
+- **Seeding an unrated engine** (for 1.2): the CLI's default, or its rating
+  in the nearest list marked provisional.
+- **The 1.x import** puts each 1.x rating into one list the user picks
+  during the import, with the source "1.x import".
+- **What is rated** is ENG-19's playing identity (a profile under (a)).
+- **PLAN §G2** says the library rating seeds a tournament and receives the
+  writeback; once decided, a dated amendment makes that the rating in the
+  tournament's list.
 
 **In the CLI repository**
 
