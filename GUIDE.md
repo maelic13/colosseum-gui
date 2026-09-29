@@ -17,7 +17,7 @@ argumentation.
 | Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22. It stays on the CLI repository's `main`, patchable, until the merge; it left the CLI repository's `dev` at CLI 11.2.1 (2026-09-29), and 1.x is read at commit `ba30829` |
 | What is missing | Everything: Phase 1 (design foundations), Phase 2 (repository and technology proof), Phase 3 (screen specifications), Phase 4 (implementation), Phase 5 (release) |
 | Depends on Colosseum | 11.4 protocol specification (before Phase 3), 13.2 synthetic streams (before 2.3), 13.3–13.4 (before 4.5; the lifecycle decision with 4.2), 13.5–13.7 (before 4.6), 13.8 release candidate (4.8) — PLAN §G9 joint milestones |
-| Next step | **1.1.1** — the engine-library decisions — `R2` (Claude Opus 5 — High); then 1.1.2–1.1.4 and 1.2, each `R2`. **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
+| Next step | **1.1.1** — the engine-library decisions; options drafted in inventory §12, waiting for the maintainer — `R2` (Claude Opus 5 — High); then 1.1.2–1.1.4 and 1.2, each `R2`. **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
 | Confirmed decisions | PLAN §G2 (2026-09-27): design first; a client of the CLI over its protocol; TypeScript + React with shadcn/ui on Radix and Tailwind; the shell a measured choice at 2.3 between Electron and Tauri 2 with Electron the default expectation; placement off, several tournaments at once; 64 participants the design point; lifecycle and close behaviour decided at 4.2 with *stop now on close* the starting preference; amendments and changed engines are CLI mechanisms; run file per tournament, rebuildable index, positions as FEN, no chess logic here; the 1.x library imported, 1.x tournaments not migrated; both themes equal |
 
 ## Current model mapping
@@ -50,7 +50,7 @@ specification and exit; `(Mn)` marks a joint milestone.
 ### Phase 1 — Design foundations (documents only; sign-offs in pairs)
 
 - ◐ **1.1** Inventory of 1.x from the CLI repository at `gui-v1.1.0`: every screen, control, setting, stored item, workflow, keyboard path, error surface, background behaviour, defect and lesson, classified keep / change / drop / decide; guidelines split into product rules and egui workarounds ([`docs/design/inventory.md`](docs/design/inventory.md)). Draft 2026-09-29: 163 items (keep 68, change 74, drop 6, decide 15), 21 product rules, 17 egui workarounds, 18 defects, 12 lessons, 19 questions (14 in 1.1.1–1.1.4, 5 for CLI 11.3.1–11.3.5); reviewed with 1.2 — **R2**
-    - ☐ **1.1.1** Decide the engine-library questions: Delete All, clone identity, library rating provenance and history (ENG-10, ENG-19, ENG-23) — **R2**
+    - ◐ **1.1.1** Decide the engine-library questions: Delete All, clone identity, library rating provenance and history (ENG-10, ENG-19, ENG-23); options and recommendations drafted 2026-09-29 in inventory §12, waiting for the maintainer's answers — **R2**
     - ☐ **1.1.2** Decide the tournament-setup questions: multi-seed gauntlet, an extra PGN file, what presets carry, the default time allowed past the clock (TRN-06, TRN-21, TRN-22, PLY-08) — **R2**
     - ☐ **1.1.3** Decide the results and live-view questions: ratings reverted on delete, evaluation point of view (ARN-05, LIV-09) — **R2**
     - ☐ **1.1.4** Decide the application questions: update checks, portable mode, writeback conflicts, second instance, long-run behaviour (APP-06, APP-08, APP-15, APP-22, APP-23) — **R2**

@@ -369,6 +369,72 @@ analysis. Answers are dated in the table when taken.
 | APP-22 | 1.1.4 | Refuse a second instance on the same data? | |
 | APP-23 | 1.1.4 | Keep the machine awake during a run; notify when a tournament finishes; progress on the taskbar or Dock? | |
 
+**Options for 1.1.1** (drafted 2026-09-29; the answer goes into the table
+above, dated, and into `requirements.md`)
+
+*ENG-10 Delete All.* In 1.x a danger-tinted "Delete All" sits in the
+library header whenever the library has an engine; a second click on the
+inline Confirm removes every engine and every logo. The confirmation names
+neither the engines nor their count, unlike Delete (ENG-11).
+
+- (a) Drop it. Select all (added by ENG-24) and then Delete (n)… gives the
+  same result through the one confirmation pattern (PR-08), which names the
+  engines. A rare destructive action no longer sits in a permanent header.
+- (b) Keep it in the library's menu, confirmed by the ENG-11 modal with the
+  count.
+- (c) Keep 1.x's inline two-step. It breaks PR-08's one pattern.
+
+Recommended: (a).
+
+*ENG-19 Clone.* 1.x copies every field and the logo under a new identity
+and keeps the name and version on purpose (the source says a "(copy)"
+suffix "would only pollute PGN tags and standings"). Add and Scan refuse a
+second entry with the same name and version (ENG-04), so Clone is the only
+way to a duplicate. The CLI does not refuse two equal labels, so a
+tournament with both writes the same `White` / `Black` name into the PGN
+and two identical rows into the standings, where "name version" is the
+engine's only name (PR-01). A clone is typically the same executable with
+other options (a strength limit, more threads), which is exactly the
+difference the results must show.
+
+- (a) "name version" is unique in the library. The clone is created with a
+  suffixed version (" (2)", " (3)", …) and opens with the version field
+  selected; an edit that would collide is refused at the field. ENG-04's
+  rule and this one become a single library invariant, which the 1.x
+  import also applies (suffixing any 1.x duplicates, and saying so).
+- (b) Duplicates allowed in the library; tournament setup refuses two
+  participants with the same "name version".
+- (c) 1.x as it is.
+
+Recommended: (a). One rule instead of two; the suffix is visible and
+editable, so nothing reaches a PGN that the user did not see. (b) moves the
+problem to the moment the user wants to start.
+
+*ENG-23 Library rating.* 1.x keeps one optional integer per engine, typed in
+the editor or overwritten, rounded, after every finished game by the
+writeback. Nothing records which of the two set it, when, or what it was
+before; a typed value is silently replaced by the next game (and DEF-03 does
+the reverse). Under PLAN §G2 the library rating seeds every tournament and
+receives the CLI's figure after every scored game, so it is the product's
+long-term memory of an engine's strength, and the only figure the run
+directories cannot give back once it is overwritten.
+
+- (a) Provenance and history. Each engine keeps a log of rating entries:
+  the value, the CLI's ± where it gave one, the source (typed, a tournament
+  by name, or the 1.x import) and the date. The per-game writebacks of one
+  tournament update that tournament's single entry, not one entry per game.
+  The library shows the latest value with its source ("2950 ± 18 · Blitz
+  gauntlet, 29 Sep"); the engine's detail shows the history.
+- (b) Provenance only: the latest value with its source and date.
+- (c) 1.x: the number alone.
+
+Recommended: (a). It is this application's own data, not a derived
+statistic (those stay the CLI's), and small: one entry per tournament per
+engine whose rating it wrote. It also settles two later questions cheaply:
+ARN-05 (1.1.3) can revert a deleted tournament's entry when nothing later
+superseded it, and APP-15 (1.1.4) can see that a typed value landed during
+a run. (b) serves the display but leaves both to guesswork.
+
 **In the CLI repository**
 
 | IDs | Step | Question |
