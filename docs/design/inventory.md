@@ -234,7 +234,7 @@ behaviour, so the CLI must provide it. The CLI column records what the CLI
 | PLY-20 | PGN tags | Event = tournament name, Site "Colosseum", real date, compact TimeControl (`3+0.03`), margins | fixed Event and Site, unknown date, per-side TimeControl; adds game, pair and opening tags | change | The CLI's tags plus the tournament's name and date |
 | PLY-21 | Per-game search statistics | nps (derived from nodes/time when an engine reports 0), depth, time per move | absent | keep | CLI gap (ARN-11) |
 | PLY-22 | Ranking and tie-breaks | Sonneborn–Berger, shared places, gauntlet score share | points, then identifier | keep | CLI gap (ARN-12) |
-| PLY-23 | Ratings | Joint ML, 6 virtual draws against the prior, anchored to the tournament-start mean, 95% error bars; Chosen pins the others | same model; `--rating` seeds, `--fixed` names the pinned, `[fixed]` shown | keep | Decided 2026-09-29 (PLAN §G2): the CLI computes; this application passes library ratings as seeds, pins what *Chosen* leaves out, and writes the result back |
+| PLY-23 | Ratings | Joint ML, 6 virtual draws against the prior, anchored to the tournament-start mean, 95% error bars; Chosen pins the others | same model; `--rating` seeds, `--fixed` names the pinned, `[fixed]` shown | keep | Decided 2026-09-29 (PLAN §G2): the CLI computes; this application passes library ratings as seeds, pins what *Chosen* leaves out, and writes the result back. Rating lists (ENG-23, 1.1.1) need joint ratings over a list's games from many runs, with the list's starting ratings, prior weight and anchor as inputs: a CLI gap for 11.3 |
 | PLY-24 | Terminations and forfeits | Breakdown per kind; forfeits per engine | per game only | keep | CLI gap (ARN-18, ARN-11) |
 | PLY-25 | Live facts | Search info up to 10 per second plus every new depth; 80-line log; clocks; ponder evaluations | not yet (CLI Phase 13) | keep | CLI 13.3 |
 | PLY-26 | Parallel change while running | Yes, stored for resume | fixed per run | decide | §12 |
@@ -355,8 +355,8 @@ analysis. Answers are dated in the table when taken.
 | ID | Step | Question | Answer |
 |---|---|---|---|
 | ENG-10 | 1.1.1 | Delete All: keep behind a modal, or drop? | Dropped (2026-09-29): select all, then Delete (n)… |
-| ENG-19 | 1.1.1 | Clone keeps the same "name version", which is ambiguous in PGN and standings. Keep, or require a distinct version? | Redesign (2026-09-29): a new naming and versioning system for the library, the clone rule derived from it; options below |
-| ENG-23 | 1.1.1 | Should the library rating show where it came from (typed or a tournament's) and keep a history? | Redesign (2026-09-29): several ratings per engine, by time control; options below |
+| ENG-19 | 1.1.1 | Clone keeps the same "name version", which is ambiguous in PGN and standings. Keep, or require a distinct version? | Redesigned (2026-09-29): engine, version and profile; Clone becomes New profile or New version; the UX carries it. Below |
+| ENG-23 | 1.1.1 | Should the library rating show where it came from (typed or a tournament's) and keep a history? | Redesigned (2026-09-29): rating lists the user defines, each recomputed from all its games, with guided *Add engines*; anchor open (Q1). Below |
 | TRN-06 | 1.1.2 | Offer gauntlets with more than one seed? | |
 | TRN-21 | 1.1.2 | Keep an optional PGN file outside the run directory, appended as games end, beside the export? | |
 | TRN-22 | 1.1.2 | Should a preset also carry the engine selection and the overrides? | |
@@ -369,15 +369,17 @@ analysis. Answers are dated in the table when taken.
 | APP-22 | 1.1.4 | Refuse a second instance on the same data? | |
 | APP-23 | 1.1.4 | Keep the machine awake during a run; notify when a tournament finishes; progress on the taskbar or Dock? | |
 
-**Options for 1.1.1** (drafted 2026-09-29; each answer goes into the table
-above, dated, and into `requirements.md`)
+**Decisions and options for 1.1.1** (2026-09-29; each answer is dated in
+the table above and carried into `requirements.md`)
 
 *ENG-10 Delete All* — decided 2026-09-29: dropped. Select all (ENG-24) and
 then Delete (n)… reach the same result through the one confirmation
 pattern (PR-08), which names the engines.
 
-*ENG-19 Names and versions* — the maintainer asked on 2026-09-29 for a new
-system rather than a clone rule; the clone rule follows from the system.
+*ENG-19 Names and versions* — decided 2026-09-29: three levels (option (a)
+below), on the condition that the user stays in control and finds it
+intuitive. The UI and UX work carries the decision: 1.3 walks the concepts
+through it and 3.1 specifies it.
 
 1.x keeps one flat entry per configured executable, with free-text name,
 version (split from `id name`, ENG-05) and author, and "name version" as
@@ -396,91 +398,111 @@ identical rows into the standings. The system has to serve:
 - a unique, readable label in the PGN, standings and every list;
 - 200 entries in one list (PLAN §G5), Add, Scan and the 1.x import.
 
-Options:
+The model. An *engine* (name, author, logo) holds *versions* (version text,
+executable, launch settings, detected options; unique within the engine),
+and each version holds *profiles* (a name and option values on top of the
+version's). Every version has an unnamed default profile. What plays and is
+rated is a profile, labelled "Stockfish 17.1", or "Stockfish 17.1 · Skill 5"
+for a named one. Add and Scan file an executable under the engine its `id
+name` matches, as a new version; a build of an existing version is offered
+a build suffix ("17.1 bmi2"). Clone becomes *New profile* (same executable)
+or *New version* (another executable). Labels are unique by construction;
+re-detect and a moved executable are handled once per version. The run file
+records the library's own identifiers beside each label, so nothing depends
+on the label.
 
-- (a) **Three levels.** An *engine* (name, author, logo) holds *versions*
-  (version text, executable, launch settings, detected options; unique
-  within the engine), and each version holds *profiles* (a name and option
-  values on top of the version's). Every version has an unnamed default
-  profile. What plays and is rated is a profile, labelled "Stockfish 17.1",
-  or "Stockfish 17.1 · Skill 5" for a named one. Add and Scan file an
-  executable under the engine its `id name` matches, as a new version; a
-  build of an existing version is offered a build suffix ("17.1 bmi2").
-  Clone becomes *New profile* (same executable) or *New version* (another
-  executable). Unique by construction at every level; re-detect and a
-  moved executable are handled once per version.
-- (b) **Two levels.** An *engine* (name, author, logo) holds *variants*,
-  each with a version, an optional label, its own executable, launch
-  settings and options; version and label together are unique within the
-  engine. Clone is *New variant* with the label to fill. Simpler, but
-  variants never share an executable, so a replaced executable is edited in
-  each variant.
-- (c) **Flat, with a label.** 1.x's entries plus a label field; name,
-  version and label together are unique in the library. Least change; no
-  grouping, and the logo and author are repeated per entry.
+What the UI must give the user (for 1.2, 1.3 and 3.1):
 
-Recommended: (a). A profile is what a clone was for, without copying the
-executable's settings; the default profile keeps the common case at "name
-version"; and grouping by engine gives the version-to-version rating
-history that testing is about. The run file records the library's own
-identifiers beside each label, so writeback never depends on the label.
-The 1.x import groups entries by name; equal "name version" entries become
-profiles of one version when they share an executable, builds with a suffix
-when they do not, and the import reports every one.
+- The levels appear only when used. An engine with one version and only the
+  default profile reads and behaves as a single entry; a second version or
+  a named profile reveals the grouping.
+- One label, shown the same way everywhere: library, setup, live view,
+  standings and PGN. Every engine picker picks profiles.
+- Adding an executable says where it went ("added as version 17.1 of
+  Stockfish") and lets the user file it elsewhere before confirming. A
+  version can move to another engine, and every level can be renamed.
+- A new profile starts from its version's options; a profile shows which
+  values are its own.
+- A name that would collide is refused at the field, naming the label it
+  would duplicate.
+- The 1.x import is shown as a proposed grouping the user confirms. Equal
+  "name version" entries become profiles of one version when they share an
+  executable, and builds with a suffix when they do not.
 
-*ENG-23 Ratings by time control* — the maintainer asked on 2026-09-29 for
-a new system with several ratings per engine, by time control.
+Not chosen: (b) two levels, engine and variant, with an executable per
+variant; (c) flat entries with a label field.
+
+*ENG-23 Rating lists* — decided 2026-09-29: rating lists the user defines
+(option (a) below), reshaped by the maintainer as follows. The UI and UX
+work carries it as it carries ENG-19; one question is still open (Q1).
 
 1.x keeps one optional integer per engine, typed or overwritten after every
 finished game by the writeback, with no record of which, when, or what it
 was before (and DEF-03 overwrites the writeback in turn). One number mixes
 results that do not compare: strength depends on the time control and on
-the threads (Rarog's pool measures 1 and 4 threads apart), and a seed from
-the wrong conditions misleads the CLI's prior. The system has to settle
-what a rating belongs to, how a tournament picks the rating it reads and
-writes, how the library shows several numbers, and what each rating
-remembers.
+the threads (Rarog's pool measures 1 and 4 threads apart).
 
-What a rating belongs to — options:
+The design:
 
-- (a) **Rating lists the user defines.** A list is a name and its
-  conditions: a time-control range by estimated game length (TRN-12's
-  estimate) or a fixed kind (nodes, depth, time per move), and optionally
-  the threads. The library starts with a default set (for instance Bullet,
-  Blitz, Rapid, Long, Fixed nodes, Fixed depth; thresholds settled at 1.2).
-  A tournament reads its seeds from, and writes back into, the list its
-  conditions match; setup shows which, and the user can pick another list
-  or none.
-- (b) **Fixed classes** by estimated game length, as rating sites do, with
-  thresholds scaled to engine play; nothing to define, but threads are not
-  a dimension and the thresholds are a guess made once for every user.
-- (c) **One rating per exact time control** ("3+0.03", "10+0.1", "100 ms per
-  move"), created as they are played. Precise, but 3+0.03 and 3+0.02 never
-  meet.
-
-Recommended: (a). It is how rating lists are kept (a list per time control
-and CPU count) and how the maintainer's own pools are run; the thresholds
-are the user's, not a guess.
-
-Around it, whichever option is chosen:
-
-- **Provenance and history per rating.** Each rating keeps its entries:
-  value, the CLI's ± where it gave one, source (typed, a tournament by name,
-  the 1.x import) and date; a tournament's per-game writebacks update its
-  one entry. This lets ARN-05 (1.1.3) revert a deleted tournament's entry
-  when nothing later superseded it, and APP-15 (1.1.4) see a typed value
-  landing during a run.
+- **A list is its conditions and its games.** A list has a name and the
+  conditions its games are played under: time control, threads, hash,
+  ponder, tablebases, opening book and adjudication. Its games come from
+  the tournaments it holds. A profile (ENG-19) may be in many lists.
+- **Ratings are recomputed from all the list's games**, jointly, never game
+  by game (PR-02). More games give more precision, and nothing decays with
+  time, because an engine on the same computer does not change. An engine
+  with few games has a wide error bar and moves far with each result; one
+  with many barely moves. That is the property wanted from Glicko, and a
+  whole-list recompute gives it exactly rather than by an incremental
+  approximation. The CLI's model already works this way inside one
+  tournament (Ordo-style joint maximum likelihood, virtual draws against a
+  prior). Computing it over a list's games from many runs is a CLI
+  capability for CLI 11.3 to add; no rating is computed here (PLAN §G2).
+- **The list sets a newcomer's start.** Each list has the rating a
+  newcomer starts from and how strongly that start holds (the prior's
+  weight), not the CLI's default. Default values are chosen at 1.2.
+- **Adding engines is a guided action.** From a list, *Add engines* takes
+  one or more new engines and proposes a tournament under the list's
+  conditions: opponents from the list around the expected strength, games
+  per opponent from a target error bar (the CLI's `stats plan` sizes
+  samples), the list's engines pinned at their ratings while the newcomers
+  are estimated (the CLI's `--fixed`). The user reviews and starts it; its
+  games join the list as they are scored. With several newcomers it is a
+  gauntlet with several seeds (TRN-06, 1.1.2).
+- **The list's history is its tournaments.** Each tournament in a list is
+  shown with its games and dates, and removing one recomputes the list
+  without it. A tournament whose conditions match a list can be added to
+  it, with any difference shown first.
+- **Deleting a tournament does not change a list.** A list keeps its own
+  record of the results it holds, so a deleted run directory takes nothing
+  from it. Removing those games too is an option in the delete
+  confirmation, off by default. This settles most of ARN-05 (1.1.3); for
+  APP-15 (1.1.4) there is no writeback left to collide, only recomputes.
+- **A typed rating** is a known outside rating (a public list's, say):
+  it becomes that profile's starting rating in the list, marked as typed.
+  The 1.x ratings arrive the same way, into one list the user picks during
+  the import, marked as imported.
 - **Display.** The library shows one list at a time, chosen there and
-  remembered, and sorts by it; an engine unrated in it shows "—". The
-  engine's detail shows every list with its history.
-- **Seeding an unrated engine** (for 1.2): the CLI's default, or its rating
-  in the nearest list marked provisional.
-- **The 1.x import** puts each 1.x rating into one list the user picks
-  during the import, with the source "1.x import".
-- **What is rated** is ENG-19's playing identity (a profile under (a)).
-- **PLAN §G2** says the library rating seeds a tournament and receives the
-  writeback; once decided, a dated amendment makes that the rating in the
-  tournament's list.
+  remembered, and sorts by it; a profile not in it shows "—". A profile's
+  detail shows every list it is in, with games, error bar and the
+  tournaments behind it.
+- **PLAN §G2** (the library rating seeds a tournament and receives the
+  writeback) is amended, dated, when 1.1.1 closes.
+
+Q1 **Anchor** (open). Joint maximum likelihood fixes only differences, so
+a list needs a rule for its scale:
+
+- (i) An anchor profile the user picks, at a fixed rating, as public rating
+  lists do. Adding weak or strong engines never shifts the others.
+- (ii) The list's average held at a fixed value. Every newcomer shifts all
+  ratings a little.
+- (iii) The average of the starting ratings, as the CLI does in one
+  tournament today. Same drift as (ii), and it depends on typed values.
+
+Recommended: (i), with (ii) until the list has an anchor.
+
+Not chosen for what a rating belongs to: (b) fixed classes by game length;
+(c) one rating per exact time control.
 
 **In the CLI repository**
 
