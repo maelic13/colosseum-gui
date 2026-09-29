@@ -43,47 +43,48 @@ it compiles or renders; it is done when its criterion is demonstrated. When
 reporting the next step, always report its class and the model the
 mapping above gives it. Step identifiers are never reused.
 
-Every phase, step and sub-step is one line here, ending in its class;
+Every phase, step and sub-step is one checkbox line here, ending in its
+class (`IN PROGRESS / <class>` while under way, `DONE <date>` once ticked);
 sub-steps sit indented under their step. PLAN §G9 holds each step's
 specification and exit; `(Mn)` marks a joint milestone.
 
 ### Phase 1 — Design foundations (documents only; sign-offs in pairs)
 
-- ◐ **1.1** Inventory of 1.x from the CLI repository at `gui-v1.1.0`: every screen, control, setting, stored item, workflow, keyboard path, error surface, background behaviour, defect and lesson, classified keep / change / drop / decide; guidelines split into product rules and egui workarounds ([`docs/design/inventory.md`](docs/design/inventory.md)). Draft 2026-09-29: 163 items (keep 68, change 74, drop 6, decide 15), 21 product rules, 17 egui workarounds, 18 defects, 12 lessons, 19 questions (14 in 1.1.1–1.1.4, 5 for CLI 11.3.1–11.3.5); reviewed with 1.2 — **R2**
-    - ◐ **1.1.1** Decide the engine-library questions: Delete All, clone identity, library rating provenance and history (ENG-10, ENG-19, ENG-23); Delete All dropped 2026-09-29; names and versions, and ratings by time control, redesigned at the maintainer's request, options drafted in inventory §12, waiting for the choice — **R2**
-    - ☐ **1.1.2** Decide the tournament-setup questions: multi-seed gauntlet, an extra PGN file, what presets carry, the default time allowed past the clock (TRN-06, TRN-21, TRN-22, PLY-08) — **R2**
-    - ☐ **1.1.3** Decide the results and live-view questions: ratings reverted on delete, evaluation point of view (ARN-05, LIV-09) — **R2**
-    - ☐ **1.1.4** Decide the application questions: update checks, portable mode, writeback conflicts, second instance, long-run behaviour (APP-06, APP-08, APP-15, APP-22, APP-23) — **R2**
-- ☐ **1.2** Requirements: users, workflows and frequency, scale targets confirmed (64 participants the design point), performance budgets as numbers, keyboard and accessibility, the library import, the open decisions answered as requirements (several tournaments, close expectations, amendments, changed engines) and the answers of 1.1.1–1.1.4; `docs/design/requirements.md` signed off with 1.1; handed to CLI 11.3 (M2) — **R2**
-- ☐ **1.3** Layout concepts: two or three as static HTML wireframes in both themes, walked through the workflows; the maintainer chooses; `docs/design/concepts.md` — **R2**
-- ☐ **1.4** EXIT — Design system: tokens for both themes and the component catalogue with states, sizes and keyboard behaviour; `docs/design/design-system.md` signed off with 1.3 — **R2**
+- [ ] **1.1** Inventory of 1.x from the CLI repository at `gui-v1.1.0`: every screen, control, setting, stored item, workflow, keyboard path, error surface, background behaviour, defect and lesson, classified keep / change / drop / decide; guidelines split into product rules and egui workarounds ([`docs/design/inventory.md`](docs/design/inventory.md)). Draft 2026-09-29: 163 items (keep 68, change 74, drop 6, decide 15), 21 product rules, 17 egui workarounds, 18 defects, 12 lessons, 19 questions (14 in 1.1.1–1.1.4, 5 for CLI 11.3.1–11.3.5); reviewed with 1.2 — **IN PROGRESS / R2**
+    - [ ] **1.1.1** Decide the engine-library questions: Delete All, clone identity, library rating provenance and history (ENG-10, ENG-19, ENG-23); Delete All dropped 2026-09-29; names and versions, and ratings by time control, redesigned at the maintainer's request, options drafted in inventory §12, waiting for the choice — **IN PROGRESS / R2**
+    - [ ] **1.1.2** Decide the tournament-setup questions: multi-seed gauntlet, an extra PGN file, what presets carry, the default time allowed past the clock (TRN-06, TRN-21, TRN-22, PLY-08) — **R2**
+    - [ ] **1.1.3** Decide the results and live-view questions: ratings reverted on delete, evaluation point of view (ARN-05, LIV-09) — **R2**
+    - [ ] **1.1.4** Decide the application questions: update checks, portable mode, writeback conflicts, second instance, long-run behaviour (APP-06, APP-08, APP-15, APP-22, APP-23) — **R2**
+- [ ] **1.2** Requirements: users, workflows and frequency, scale targets confirmed (64 participants the design point), performance budgets as numbers, keyboard and accessibility, the library import, the open decisions answered as requirements (several tournaments, close expectations, amendments, changed engines) and the answers of 1.1.1–1.1.4; `docs/design/requirements.md` signed off with 1.1; handed to CLI 11.3 (M2) — **R2**
+- [ ] **1.3** Layout concepts: two or three as static HTML wireframes in both themes, walked through the workflows; the maintainer chooses; `docs/design/concepts.md` — **R2**
+- [ ] **1.4** EXIT — Design system: tokens for both themes and the component catalogue with states, sizes and keyboard behaviour; `docs/design/design-system.md` signed off with 1.3 — **R2**
 
 ### Phase 2 — Repository and technology proof (beside Phase 1)
 
-- ☐ **2.1** Skeleton: the §G4 front end behind a shell-agnostic interface in the Electron shell; formatter, linter, type check, unit / component / end-to-end runners, CI on the three required platforms, a packaged empty application per required target, `docs/dependencies.md`, user-facing `README.md`, the verification baseline written into `AGENTS.md` — **I2**
-- ☐ **2.2** Component gallery: the 1.4 catalogue on the real stack in both themes with screenshot tests; gaps fed back into 1.4 before Phase 3 — **I1**
-- ☐ **2.3** EXIT — Performance proof against the 1.2 budgets at scale on the CLI's synthetic streams (CLI 13.2), the same front end in Electron and in Tauri 2, on macOS arm64, Windows x64 and Linux x64; the shell chosen by ADR (Electron unless Tauri meets every budget and its smaller bundle is judged worth it), the other build removed; the §G4 fallbacks measured the same way only if the front end itself fails (M4) — **V**
+- [ ] **2.1** Skeleton: the §G4 front end behind a shell-agnostic interface in the Electron shell; formatter, linter, type check, unit / component / end-to-end runners, CI on the three required platforms, a packaged empty application per required target, `docs/dependencies.md`, user-facing `README.md`, the verification baseline written into `AGENTS.md` — **I2**
+- [ ] **2.2** Component gallery: the 1.4 catalogue on the real stack in both themes with screenshot tests; gaps fed back into 1.4 before Phase 3 — **I1**
+- [ ] **2.3** EXIT — Performance proof against the 1.2 budgets at scale on the CLI's synthetic streams (CLI 13.2), the same front end in Electron and in Tauri 2, on macOS arm64, Windows x64 and Linux x64; the shell chosen by ADR (Electron unless Tauri meets every budget and its smaller bundle is judged worth it), the other build removed; the §G4 fallbacks measured the same way only if the front end itself fails (M4) — **V**
 
 ### Phase 3 — Screen specifications (after 1.4, 2.2 and CLI 11.4)
 
-- ☐ **3.1** Shell, settings and engine library; guards DEF-02, 04, 05, 06, 08 — **R2**
-- ☐ **3.2** Tournament creation, presets, history and results; guards DEF-07, 13, 15, 17, 18 — **R2**
-- ☐ **3.3** EXIT — Live view, lifecycle (stop, stop now, close options, resume) and amendments; guards DEF-01, 10, 11, 12, 16; `docs/design/screens.md` signed off; every keep and change item placed or dropped; every defect guarded — **R2**
+- [ ] **3.1** Shell, settings and engine library; guards DEF-02, 04, 05, 06, 08 — **R2**
+- [ ] **3.2** Tournament creation, presets, history and results; guards DEF-07, 13, 15, 17, 18 — **R2**
+- [ ] **3.3** EXIT — Live view, lifecycle (stop, stop now, close options, resume) and amendments; guards DEF-01, 10, 11, 12, 16; `docs/design/screens.md` signed off; every keep and change item placed or dropped; every defect guarded — **R2**
 
 ### Phase 4 — Implementation (a screen only after its specification is signed off)
 
-- ☐ **4.1** Design system in code, gallery finalised, screenshot regression — **I1**
-- ☐ **4.2** Shell and CLI process manager: bundled and pinned CLI, handshake and version check, crash handling, Windows Job Object; the lifecycle decision (close, detach, re-attach) analysed and taken with CLI 13.4, recorded by ADR; guards DEF-01, 02, 09 — **R2, then I2**
-- ☐ **4.3** Engine library with the 1.x import; guards DEF-02, 03, 04, 05, 06, 08 — **I1**
-- ☐ **4.4** Tournament creation and presets: run file writer, dry-run validation, the largest tournament within budget; guards DEF-07, 15, 17 — **I1**
-- ☐ **4.5** Live tournament view: facts and state coalesced to one render per frame, gap and snapshot resync, several tournaments at once, following a game; guards DEF-12, 15 (M5) — **I2**
-- ☐ **4.6** Results, history and amendments: rebuildable index, standings, crosstable, games browser on paged queries, export, stop and resume, add / remove / length, changed engines, rating writeback; guards DEF-10, 11, 13, 16, 18 (M6) — **I2**
-- ☐ **4.7** Packaging, signing, updater and release lane for the required targets and the cheap wanted ones; the CLI bundled and pinned — **I2**
-- ☐ **4.8** EXIT — Every keep and change item present or dropped; no inventory defect reproducible; budgets met on a real tournament on the three required platforms (native Rarog and Basilisk on macOS and Linux); usability walkthrough; against the CLI 13.8 release candidate (M7) — **V**
+- [ ] **4.1** Design system in code, gallery finalised, screenshot regression — **I1**
+- [ ] **4.2** Shell and CLI process manager: bundled and pinned CLI, handshake and version check, crash handling, Windows Job Object; the lifecycle decision (close, detach, re-attach) analysed and taken with CLI 13.4, recorded by ADR; guards DEF-01, 02, 09 — **R2, then I2**
+- [ ] **4.3** Engine library with the 1.x import; guards DEF-02, 03, 04, 05, 06, 08 — **I1**
+- [ ] **4.4** Tournament creation and presets: run file writer, dry-run validation, the largest tournament within budget; guards DEF-07, 15, 17 — **I1**
+- [ ] **4.5** Live tournament view: facts and state coalesced to one render per frame, gap and snapshot resync, several tournaments at once, following a game; guards DEF-12, 15 (M5) — **I2**
+- [ ] **4.6** Results, history and amendments: rebuildable index, standings, crosstable, games browser on paged queries, export, stop and resume, add / remove / length, changed engines, rating writeback; guards DEF-10, 11, 13, 16, 18 (M6) — **I2**
+- [ ] **4.7** Packaging, signing, updater and release lane for the required targets and the cheap wanted ones; the CLI bundled and pinned — **I2**
+- [ ] **4.8** EXIT — Every keep and change item present or dropped; no inventory defect reproducible; budgets met on a real tournament on the three required platforms (native Rarog and Basilisk on macOS and Linux); usability walkthrough; against the CLI 13.8 release candidate (M7) — **V**
 
 ### Phase 5 — Release
 
-- ☐ **5.1** EXIT — First release after the swap and the merge: 2.0.0 with its `gui-v2.0.0` bridge release, `CHANGELOG.md`, the pin set to the released CLI, published right after the CLI release (M9) — **V**
+- [ ] **5.1** EXIT — First release after the swap and the merge: 2.0.0 with its `gui-v2.0.0` bridge release, `CHANGELOG.md`, the pin set to the released CLI, published right after the CLI release (M9) — **V**
 
 ## What to do now
 
@@ -103,8 +104,8 @@ git diff --check
 ## Working rhythm
 
 ```text
-Pick the next ☐ step  ->  do it + tests  ->  demonstrate its exit
-criterion  ->  mark it ☑ here  ->  update PLAN.md when useful  ->  commit before
+Pick the next open step  ->  do it + tests  ->  demonstrate its exit
+criterion  ->  tick it here  ->  update PLAN.md when useful  ->  commit before
 the next step.
 ```
 

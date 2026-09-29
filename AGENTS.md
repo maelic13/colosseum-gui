@@ -82,9 +82,11 @@ synchronized between PLAN and GUIDE.
 2. Implement the step, its tests, documentation and generated files.
 3. Run the verification baseline below and whatever the step names.
 4. Demonstrate the exit criterion. A compiling change is not complete.
-5. Mark the finished step `☑` in `GUIDE.md` in the same change, with the
-   evidence the exit asks for. Use `☐` for todo and `◐` only while genuinely
-   in progress; do not use GitHub `[ ]` task syntax.
+5. Tick the finished step (`- [x]`, ending `— DONE <date>`) in `GUIDE.md`
+   in the same change, with the evidence the exit asks for. An open step is
+   `- [ ]` ending in its class; end it `— **IN PROGRESS / <class>**` only
+   while genuinely in progress. Sub-steps are indented four spaces under
+   their step, one line each.
 6. Commit the completed step before starting another numbered step.
 
 Use a short imperative commit subject naming the outcome, preferably with
