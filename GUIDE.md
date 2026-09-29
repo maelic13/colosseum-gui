@@ -17,7 +17,7 @@ argumentation.
 | Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22. It stays on the CLI repository's `main`, patchable, until the merge; it leaves the CLI repository's `dev` once 1.1 has read it (CLI 11.2.1) |
 | What is missing | Everything: Phase 1 (design foundations), Phase 2 (repository and technology proof), Phase 3 (screen specifications), Phase 4 (implementation), Phase 5 (release) |
 | Depends on Colosseum | 11.4 protocol specification (before Phase 3), 13.2 synthetic streams (before 2.3), 13.3–13.4 (before 4.5; the lifecycle decision with 4.2), 13.5–13.7 (before 4.6), 13.8 release candidate (4.8) — PLAN §G9 joint milestones |
-| Next step | **1.1** — inventory of 1.x — `R2` (Claude Opus 5 — High). **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
+| Next step | **1.2** — requirements, reviewed with the 1.1 inventory draft and its questions — `R2` (Claude Opus 5 — High). **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
 | Confirmed decisions | PLAN §G2 (2026-09-27): design first; a client of the CLI over its protocol; TypeScript + React with shadcn/ui on Radix and Tailwind; the shell a measured choice at 2.3 between Electron and Tauri 2 with Electron the default expectation; placement off, several tournaments at once; 64 participants the design point; lifecycle and close behaviour decided at 4.2 with *stop now on close* the starting preference; amendments and changed engines are CLI mechanisms; run file per tournament, rebuildable index, positions as FEN, no chess logic here; the 1.x library imported, 1.x tournaments not migrated; both themes equal |
 
 ## Current model mapping
@@ -46,19 +46,24 @@ are never reused.
 
 ### Phase 1 — Design foundations (documents only; sign-offs in pairs)
 
-- ☐ **1.1** — `R2` — Inventory of 1.x from the Colosseum
-  code at `gui-v1.1.0`, its changelog, guidelines and release history: every
-  screen, control, setting, stored item, workflow, keyboard path, error
-  surface, background behaviour, defect and lesson, each classified keep /
-  change / drop / maintainer decides; guidelines split into product rules
-  and egui workarounds; `docs/design/inventory.md` — PLAN §G9
+- ◐ **1.1 — IN PROGRESS** — `R2` — Inventory of 1.x from the CLI
+  repository's code at `gui-v1.1.0`, its changelog, guidelines and release
+  history: every screen, control, setting, stored item, workflow, keyboard
+  path, error surface, background behaviour, defect and lesson, each
+  classified keep / change / drop / maintainer decides; guidelines split
+  into product rules and egui workarounds;
+  [`docs/design/inventory.md`](docs/design/inventory.md) — PLAN §G9.
+  Draft written 2026-09-29: 163 items (keep 68, change 74, drop 6,
+  decide 15), 21 product rules, 17 egui workarounds, 18 defects, 12
+  lessons, 19 questions (13 here, 6 for CLI 11.3). Waiting for review with
+  1.2
 - ☐ **1.2** — `R2` — Requirements: users, workflows and
   frequency, scale targets confirmed (64 participants the design point),
   performance budgets as numbers, keyboard and accessibility, the library
   import, the open decisions answered as requirements (several tournaments,
   close expectations, amendments, changed engines);
-  `docs/design/requirements.md` signed off with 1.1; handed to Colosseum
-  11.3 — PLAN §G9 (M2)
+  `docs/design/requirements.md` signed off with 1.1; handed to CLI 11.3 —
+  PLAN §G9 (M2)
 - ☐ **1.3** — `R2` — Two or three layout concepts as static
   HTML wireframes in both themes, walked through the workflows; the
   maintainer chooses; `docs/design/concepts.md` — PLAN §G9
