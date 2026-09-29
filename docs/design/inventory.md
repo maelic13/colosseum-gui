@@ -213,13 +213,13 @@ behaviour, so the CLI must provide it. The CLI column records what the CLI
 | ID | Item | 1.x | CLI today | Class | Note |
 |---|---|---|---|---|---|
 | PLY-01 | Schedules | Round robin by the circle method, gauntlet seeds against the field, repeated per cycle | same | keep | |
-| PLY-02 | Colours | Alternate within an encounter | same | change | Not across cycles (DEF-14) |
+| PLY-02 | Colours | Alternate within an encounter | same | change | Not across cycles (DEF-14); CLI 11.3.5 |
 | PLY-03 | Openings per encounter | One opening for both colours; the book cycles silently when short | refuses unless `--book-wrap`; reports reuse | change | Cycling allowed, reuse shown |
 | PLY-04 | Opening order | Book seed, legacy shuffle | master seed, named RNG | change | The CLI's; nothing to stay compatible with |
 | PLY-05 | Opening count cap | Truncate after ordering | absent | keep | CLI gap |
 | PLY-06 | Book format | Chosen explicitly (EPD, PGN) | by extension | change | By extension, as the CLI does |
 | PLY-07 | Time controls | Five kinds, one for both sides | same | keep | |
-| PLY-08 | Forfeit tolerance | 2 s past the budget | 20 ms (`--margin-ms`) | decide | §12; the 1.x library holds old engines that stall |
+| PLY-08 | Forfeit tolerance | 2 s past the budget | 20 ms by default; `--margin-ms` takes any value | decide | The CLI already lets this application set its own; the default is 1.1.2 |
 | PLY-09 | Engine processes | Fresh per game, spawned and configured concurrently; 30 s handshake | same for tournaments | keep | |
 | PLY-10 | Option layers | Library, then tournament-wide, then per-engine overrides | flat `--option`, `--engine-option` | keep | This application composes the run file from its library |
 | PLY-11 | Threads and hash | Mapped by exact-name allowlist to what each engine calls them, clamped to the declared range; never to look-alikes | sent verbatim, no clamp | keep | Where the mapping runs: §12 |
@@ -234,7 +234,7 @@ behaviour, so the CLI must provide it. The CLI column records what the CLI
 | PLY-20 | PGN tags | Event = tournament name, Site "Colosseum", real date, compact TimeControl (`3+0.03`), margins | fixed Event and Site, unknown date, per-side TimeControl; adds game, pair and opening tags | change | The CLI's tags plus the tournament's name and date |
 | PLY-21 | Per-game search statistics | nps (derived from nodes/time when an engine reports 0), depth, time per move | absent | keep | CLI gap (ARN-11) |
 | PLY-22 | Ranking and tie-breaks | Sonneborn–Berger, shared places, gauntlet score share | points, then identifier | keep | CLI gap (ARN-12) |
-| PLY-23 | Ratings | Joint ML, 6 virtual draws against the prior, anchored to the tournament-start mean, 95% error bars; Chosen pins the others | same model; `--fixed` names the pinned, `[fixed]` shown | keep | |
+| PLY-23 | Ratings | Joint ML, 6 virtual draws against the prior, anchored to the tournament-start mean, 95% error bars; Chosen pins the others | same model; `--rating` seeds, `--fixed` names the pinned, `[fixed]` shown | keep | Decided 2026-09-29 (PLAN §G2): the CLI computes; this application passes library ratings as seeds, pins what *Chosen* leaves out, and writes the result back |
 | PLY-24 | Terminations and forfeits | Breakdown per kind; forfeits per engine | per game only | keep | CLI gap (ARN-18, ARN-11) |
 | PLY-25 | Live facts | Search info up to 10 per second plus every new depth; 80-line log; clocks; ponder evaluations | not yet (CLI Phase 13) | keep | CLI 13.3 |
 | PLY-26 | Parallel change while running | Yes, stored for resume | fixed per run | decide | §12 |
@@ -321,7 +321,7 @@ the code unless marked.
 | DEF-11 | An unscored game counts as finished in a session and as pending after a reload |
 | DEF-12 | Elapsed time and averages restart after a reload, contrary to the 1.0.0 changelog |
 | DEF-13 | Two running tournaments updating the same engine overwrite each other's writeback |
-| DEF-14 | With one game per pair, colours do not alternate across cycles |
+| DEF-14 | With one game per pair, colours do not alternate across cycles (the CLI's shared pairing: CLI 11.3.5) |
 | DEF-15 | Parallel games capped at the cores in setup but at 256 in the live bar |
 | DEF-16 | A rename does not reach later games' PGN `Event` in the same session |
 | DEF-17 | Creation writes the tournament before loading its book; a bad book may leave an orphan (unverified) |
@@ -346,37 +346,45 @@ the code unless marked.
 
 ## 12. For the maintainer to decide
 
-For sign-off with 1.2. The CLI-facing questions are taken into CLI 11.3,
-which decides them with the maintainer.
+Each question is a numbered step, so none is lost: 1.1.1–1.1.4 here, before
+the requirements are signed off; CLI 11.3.1–11.3.5 there, after the gap
+analysis. Answers are dated in the table when taken.
 
 **Here**
 
-| ID | Question |
-|---|---|
-| ENG-10 | Delete All: keep behind a modal, or drop? |
-| ENG-19 | Clone keeps the same "name version", which is ambiguous in PGN and standings. Keep, or require a distinct version? |
-| ENG-23 | Should the library rating show where it came from (typed or a tournament's) and keep a history? |
-| TRN-06 | Offer gauntlets with more than one seed? |
-| TRN-21 | Keep an optional PGN file outside the run directory, appended as games end, beside the export? |
-| TRN-22 | Should a preset also carry the engine selection and the overrides? |
-| ARN-05 | Should deleting a tournament revert the ratings it wrote into the library? |
-| LIV-09 | Evaluation from White's point of view (1.x live view) or the side to move (1.x PGN comments), or switchable? |
-| APP-06 | Check for updates automatically at startup? |
-| APP-08 | Keep a portable mode, and by flag or by a marker file? |
-| APP-15 | Rating writeback conflicts: two tournaments updating one engine, and a typed rating during a run |
-| APP-22 | Refuse a second instance on the same data? |
-| APP-23 | Keep the machine awake during a run; notify when a tournament finishes; progress on the taskbar or Dock? |
+| ID | Step | Question | Answer |
+|---|---|---|---|
+| ENG-10 | 1.1.1 | Delete All: keep behind a modal, or drop? | |
+| ENG-19 | 1.1.1 | Clone keeps the same "name version", which is ambiguous in PGN and standings. Keep, or require a distinct version? | |
+| ENG-23 | 1.1.1 | Should the library rating show where it came from (typed or a tournament's) and keep a history? | |
+| TRN-06 | 1.1.2 | Offer gauntlets with more than one seed? | |
+| TRN-21 | 1.1.2 | Keep an optional PGN file outside the run directory, appended as games end, beside the export? | |
+| TRN-22 | 1.1.2 | Should a preset also carry the engine selection and the overrides? | |
+| PLY-08 | 1.1.2 | The default time allowed past the clock (`--margin-ms`; 1.x 2 s, CLI 20 ms), and may the user change it? | |
+| ARN-05 | 1.1.3 | Should deleting a tournament revert the ratings it wrote into the library? | |
+| LIV-09 | 1.1.3 | Evaluation from White's point of view (1.x live view) or the side to move (1.x PGN comments), or switchable? | |
+| APP-06 | 1.1.4 | Check for updates automatically at startup? | |
+| APP-08 | 1.1.4 | Keep a portable mode, and by flag or by a marker file? | |
+| APP-15 | 1.1.4 | Rating writeback conflicts: two tournaments updating one engine, and a typed rating during a run | |
+| APP-22 | 1.1.4 | Refuse a second instance on the same data? | |
+| APP-23 | 1.1.4 | Keep the machine awake during a run; notify when a tournament finishes; progress on the taskbar or Dock? | |
 
-**At CLI 11.3**
+**In the CLI repository**
 
-| ID | Question |
-|---|---|
-| PLY-08 | Forfeit tolerance for tournaments started here: 1.x's 2 s, the CLI's 20 ms, or a setting? |
-| PLY-11, PLY-12, PLY-13 | Threads and hash mapping, compatibility notes and tablebase injection: in the CLI, or composed here from the library's detected options into the run file? |
-| PLY-14 | Ponder: always send `Ponder=false` when off; allow it without a clock and without separate cores? |
-| PLY-15 | Adjudication defaults offered here, and one-sided resign? |
-| PLY-17, PLY-18 | A game whose engine cannot start: stop the tournament (CLI) or skip and replay later (1.x)? A fault allowance that marks a tournament invalid? |
-| PLY-26 | Change the number of parallel games while a tournament runs? |
+| IDs | Step | Question |
+|---|---|---|
+| PLY-11, PLY-12, PLY-13 | CLI 11.3.1 | Threads and hash mapping, compatibility notes and tablebase settings: in the CLI, or composed here from the library's detected options into the run file? |
+| PLY-14 | CLI 11.3.2 | Ponder: `Ponder=false` when off; allowed without a clock and without separate cores? |
+| PLY-15, PLY-35 | CLI 11.3.3 | Adjudication defaults offered here, one-sided resign, book and scoreless plies in the windows, the start position in threefold |
+| PLY-17, PLY-18, PLY-35 | CLI 11.3.4 | An engine that cannot start: stop the tournament (CLI) or skip and replay later (1.x)? A fault allowance that marks a tournament invalid? A fixed-search hang: time loss or crash? |
+| PLY-26, DEF-14 | CLI 11.3.5 | Parallel games changed while a tournament runs; colours across cycles at one game per pair |
+
+**Settled 2026-09-29**
+
+- **Ratings** (PLY-23, APP-15 context): the CLI computes; this application
+  keeps the library (PLAN §G2).
+- **Time past the clock** (PLY-08): the CLI already takes any
+  `--margin-ms`, so only this application's default is open (1.1.2).
 
 ## 13. Absent in 1.x, noted for 1.2
 

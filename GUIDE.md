@@ -55,8 +55,20 @@ are never reused.
   [`docs/design/inventory.md`](docs/design/inventory.md) — PLAN §G9.
   Draft written 2026-09-29: 163 items (keep 68, change 74, drop 6,
   decide 15), 21 product rules, 17 egui workarounds, 18 defects, 12
-  lessons, 19 questions (13 here, 6 for CLI 11.3). Waiting for review with
-  1.2
+  lessons, 19 questions (14 for 1.1.1–1.1.4, 5 for CLI 11.3.1–11.3.5).
+  Waiting for review with 1.2
+- ☐ **1.1.1** — `R2` — Decide the engine-library questions: Delete
+  All, clone identity, library rating provenance (ENG-10, ENG-19, ENG-23)
+  — PLAN §G9
+- ☐ **1.1.2** — `R2` — Decide the tournament-setup questions:
+  multi-seed gauntlet, an extra PGN file, what presets carry, the default
+  time allowed past the clock (TRN-06, TRN-21, TRN-22, PLY-08) — PLAN §G9
+- ☐ **1.1.3** — `R2` — Decide the results and live-view questions:
+  ratings reverted on delete, evaluation point of view (ARN-05, LIV-09) —
+  PLAN §G9
+- ☐ **1.1.4** — `R2` — Decide the application questions: update
+  checks, portable mode, writeback conflicts, second instance, long-run
+  behaviour (APP-06, APP-08, APP-15, APP-22, APP-23) — PLAN §G9
 - ☐ **1.2** — `R2` — Requirements: users, workflows and
   frequency, scale targets confirmed (64 participants the design point),
   performance budgets as numbers, keyboard and accessibility, the library
@@ -91,13 +103,14 @@ are never reused.
 
 ### Phase 3 — Screen specifications (after 1.4, 2.2 and CLI 11.4)
 
-- ☐ **3.1** — `R2` — Shell, settings and engine library —
-  PLAN §G9
+- ☐ **3.1** — `R2` — Shell, settings and engine library;
+  guards DEF-02, 04, 05, 06, 08 — PLAN §G9
 - ☐ **3.2** — `R2` — Tournament creation, presets, history and
-  results — PLAN §G9
+  results; guards DEF-07, 13, 15, 17, 18 — PLAN §G9
 - ☐ **3.3 — EXIT** — `R2` — Live view, lifecycle (stop, stop
-  now, close options, resume) and amendments; `docs/design/screens.md`
-  signed off; every keep item placed or dropped — PLAN §G9
+  now, close options, resume) and amendments; guards DEF-01, 10, 11, 12,
+  16; `docs/design/screens.md` signed off; every keep and change item
+  placed or dropped; every defect guarded — PLAN §G9
 
 ### Phase 4 — Implementation (a screen only after its specification is signed off)
 
@@ -106,24 +119,25 @@ are never reused.
 - ☐ **4.2** — `R2`, then `I2` — Shell and CLI process manager: bundled
   and pinned CLI, handshake and version check, crash handling, Windows Job
   Object; the lifecycle decision (close, detach, re-attach) analysed and
-  taken with CLI 13.4, recorded by ADR — PLAN §G9
-- ☐ **4.3** — `I1` — Engine library with the 1.x import —
-  PLAN §G9
+  taken with CLI 13.4, recorded by ADR; guards DEF-01, 02, 09 — PLAN §G9
+- ☐ **4.3** — `I1` — Engine library with the 1.x import;
+  guards DEF-02, 03, 04, 05, 06, 08 — PLAN §G9
 - ☐ **4.4** — `I1` — Tournament creation and presets: run
-  file writer, dry-run validation, the largest tournament within budget —
-  PLAN §G9
+  file writer, dry-run validation, the largest tournament within budget;
+  guards DEF-07, 15, 17 — PLAN §G9
 - ☐ **4.5** — `I2` — Live tournament view: facts and state
   coalesced to one render per frame, gap and snapshot resync, several
-  tournaments at once, following a game — PLAN §G9 (M5)
+  tournaments at once, following a game; guards DEF-12, 15 — PLAN §G9
+  (M5)
 - ☐ **4.6** — `I2` — Results, history and amendments:
   rebuildable index, standings, crosstable, games browser on paged queries,
   export, stop and resume, add / remove / length, changed engines, rating
-  writeback — PLAN §G9 (M6)
+  writeback; guards DEF-10, 11, 13, 16, 18 — PLAN §G9 (M6)
 - ☐ **4.7** — `I2` — Packaging, signing, updater and release
   lane for the required targets and the cheap wanted ones; the CLI bundled
   and pinned — PLAN §G9
-- ☐ **4.8 — EXIT** — `V` — Every keep item present or
-  dropped; budgets met on a real tournament on the three required platforms
+- ☐ **4.8 — EXIT** — `V` — Every keep and change item present
+  or dropped; no inventory defect reproducible; budgets met on a real tournament on the three required platforms
   (native Rarog and Basilisk on macOS and Linux); usability walkthrough;
   against the CLI 13.8 release candidate — PLAN §G9 (M7)
 

@@ -74,6 +74,13 @@ Every step in §G9 is bound by them.
   tournament; adding one to a running tournament; changing an active
   tournament's length. All are CLI mechanisms (decided at CLI 11.3,
   implemented in CLI 13.5 and 13.6) that this application presents.
+- **Ratings (2026-09-29).** The CLI computes every tournament's ratings,
+  error bars and performance ratings and publishes a snapshot after every
+  scored game. This application owns the engine library and its ratings:
+  it passes each engine's library rating as the starting rating, pins the
+  engines a tournament must not move (*Chosen* mode pins the rest), and
+  writes the CLI's figure into the library after each scored game. It never
+  computes a rating.
 - **Sign-offs.** Each design step ends in a maintainer sign-off; consecutive
   document steps are reviewed in pairs (1.1 with 1.2, 1.3 with 1.4).
 
@@ -91,7 +98,8 @@ Three parts, one process boundary:
 logos, saved options, library ratings and their writeback), tournament
 presets, the list of the user's tournaments and where their run directories
 are, and the application settings. It never re-implements a rating or a
-statistic and holds no chess logic: positions arrive as FEN.
+statistic and holds no chess logic: positions arrive as FEN. Ratings split
+as §G2 says: the CLI computes, this application keeps the library.
 
 **Data flow of a tournament.**
 
@@ -313,7 +321,7 @@ reason; the recommendation never changes the active model by itself.
 
 | Step | Class |
 |---|---|
-| 1.1–1.4 | `R2` |
+| 1.1, 1.1.1–1.1.4, 1.2–1.4 | `R2` |
 | 2.1 | `I2` |
 | 2.2 | `I1` |
 | 2.3 | `V` |
@@ -352,6 +360,29 @@ reason; the recommendation never changes the active model by itself.
   which carry over, and egui workarounds, which do not.
   **Exit:** `docs/design/inventory.md`, every item classified; reviewed with
   1.2.
+- **1.1.1 Decide the engine-library questions** (`R2`). Inventory §12:
+  ENG-10 Delete All; ENG-19 whether a clone keeps the same "name version";
+  ENG-23 whether the library rating shows where it came from and keeps a
+  history.
+  **Exit:** each answer dated in inventory §12 and carried into
+  `requirements.md` (1.2).
+- **1.1.2 Decide the tournament-setup questions** (`R2`). TRN-06
+  gauntlets with more than one seed; TRN-21 a PGN file outside the run
+  directory; TRN-22 what a preset carries; and PLY-08, the default time
+  allowed past the clock that this application passes as the CLI's
+  `--margin-ms` (any value; 1.x used 2 s, the CLI defaults to 20 ms), and
+  whether the user can change it.
+  **Exit:** as 1.1.1.
+- **1.1.3 Decide the results and live-view questions** (`R2`). ARN-05
+  whether deleting a tournament reverts the ratings it wrote; LIV-09 the
+  point of view of evaluations.
+  **Exit:** as 1.1.1.
+- **1.1.4 Decide the application questions** (`R2`). APP-06 automatic
+  update checks; APP-08 portable mode; APP-15 rating writeback conflicts
+  (two tournaments, a typed rating during a run); APP-22 a second instance;
+  APP-23 keeping the machine awake, a notification when a tournament ends,
+  progress on the taskbar or Dock.
+  **Exit:** as 1.1.1.
 - **1.2 Requirements** (`R2`). Who uses the application and for what;
   the workflows with their frequency (set up, start, watch, stop and resume,
   manage engines, review results, export, amend); the §G5 scale targets
@@ -359,7 +390,8 @@ reason; the recommendation never changes the active model by itself.
   accessibility expectations; the 1.x library import; the open decisions
   answered as requirements — several tournaments at once, what the user
   expects on close (the options 4.2 will analyse), what amending a running
-  tournament should look like, what the user expects when an engine changed.
+  tournament should look like, what the user expects when an engine changed
+  — and the answers of 1.1.1–1.1.4.
   **Exit:** `docs/design/requirements.md` signed off with 1.1; handed to
   CLI 11.3. (M2)
 - **1.3 Layout concepts** (`R2`). Two or three information
@@ -420,17 +452,21 @@ and behaviour at the §G5 scale.
 - **3.1 Shell, settings and engine library** (`R2`). Navigation of the
   chosen concept; settings (theme, paths, the CLI in use); the library list
   and inspector; add, inspect through the CLI, options, logos, ratings,
-  check; the 1.x import.
+  check; the 1.x import. Guards inventory DEF-02, DEF-04, DEF-05, DEF-06,
+  DEF-08.
 - **3.2 Tournament creation, history and results** (`R2`). The creation
   flow and presets at 64 participants; validation through dry-run; the
   tournament list as an index; standings, crosstable, games browser,
-  terminations, export.
+  terminations, export. Guards DEF-07, DEF-13, DEF-15, DEF-17, DEF-18.
 - **3.3 — EXIT: Live view, lifecycle and amendments** (`R2`). Several
   tournaments at once; following a game; stop and stop now; the close
   options as 4.2 will analyse them; resume; remove or add a participant,
-  change the length; the changed-engine case.
-  **Exit:** `docs/design/screens.md` signed off; every *keep* item of 1.1
-  appears on a screen or is recorded as dropped by the maintainer.
+  change the length; the changed-engine case. Guards DEF-01, DEF-10,
+  DEF-11, DEF-12, DEF-16.
+  **Exit:** `docs/design/screens.md` signed off; every *keep* and *change*
+  item of 1.1 appears on a screen (a *change* item with its change) or is
+  recorded as dropped by the maintainer; every inventory defect (§11) has
+  its guard in a specification (DEF-14 is the CLI's, 11.3.5).
 
 ### Phase 4 — Implementation (a screen only after its specification is signed off)
 
@@ -441,23 +477,28 @@ and behaviour at the §G5 scale.
   handling and error surfaces, the Windows Job Object; the **lifecycle
   decision** analysed and taken with CLI 13.4 — what close does,
   whether a tournament keeps running without the application, whether it
-  can be re-attached — recorded in an ADR here and in CLI S5.15.
+  can be re-attached — recorded in an ADR here and in CLI S5.15. Guards
+  DEF-01, DEF-02 (settings), DEF-09.
 - **4.3 Engine library** (`I1`). Per 3.1, including the 1.x import.
+  Guards DEF-02 (library), DEF-03, DEF-04, DEF-05, DEF-06, DEF-08.
 - **4.4 Tournament creation and presets** (`I1`). Per 3.2: the run-file
   writer, dry-run validation, creation and start of the largest tournament
-  within budget.
+  within budget. Guards DEF-07, DEF-15, DEF-17.
 - **4.5 Live tournament view** (`I2`). Facts and state consumed through
   the shell, coalesced to one render per frame; gap and snapshot resync;
-  several tournaments at once; following a game. (M5)
+  several tournaments at once; following a game. Guards DEF-12, DEF-15.
+  (M5)
 - **4.6 Results, history and amendments** (`I2`). The rebuildable index;
   standings, crosstable and the games browser on paged queries; export;
   stop and resume; amendments; the changed-engine handling; rating
-  writeback. (M6)
+  writeback. Guards DEF-10, DEF-11, DEF-13, DEF-16, DEF-18. (M6)
 - **4.7 Packaging, signing, updater and release lane** (`I2`). Required
   targets and the cheap wanted ones; the CLI bundled and pinned; signing
   and notarisation of the whole bundle.
-- **4.8 — EXIT: Acceptance** (`V`). Every *keep* item present or
-  dropped by the maintainer; the 1.2 budgets met on a real tournament from
+- **4.8 — EXIT: Acceptance** (`V`). Every *keep* and *change* item
+  present, with its change, or dropped by the maintainer; no inventory
+  defect reproducible, each covered by a test or a walkthrough check; the
+  lessons (LES) checked where they apply; the 1.2 budgets met on a real tournament from
   the maintainer's library on the three required platforms; a usability
   walkthrough with the maintainer; all of it against the CLI 13.8
   release candidate. (M7)
