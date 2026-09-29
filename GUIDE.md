@@ -13,8 +13,8 @@ argumentation.
 
 | | |
 |---|---|
-| Repository | `maelic13/colosseum-gui`, seeded from the CLI repository at its step 11.2 (`docs/gui-v2/`); takes `maelic13/colosseum` in the swap right after 5.1 (PLAN §G8). No code yet |
-| Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22, in maintenance in the CLI repository until this application's first release |
+| Repository | `maelic13/colosseum-gui`, seeded from the CLI repository at its step 11.2 (`docs/gui-v2/`); takes `maelic13/colosseum` in the swap before both releases (PLAN §G8). Work on `dev`, merged into `master` by one pull request after the swap. No code yet |
+| Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22. It stays on the CLI repository's `main`, patchable, until the merge; it leaves the CLI repository's `dev` once 1.1 has read it (CLI 11.2.1) |
 | What is missing | Everything: Phase 1 (design foundations), Phase 2 (repository and technology proof), Phase 3 (screen specifications), Phase 4 (implementation), Phase 5 (release) |
 | Depends on Colosseum | 11.4 protocol specification (before Phase 3), 13.2 synthetic streams (before 2.3), 13.3–13.4 (before 4.5; the lifecycle decision with 4.2), 13.5–13.7 (before 4.6), 13.8 release candidate (4.8) — PLAN §G9 joint milestones |
 | Next step | **1.1** — inventory of 1.x — `R2` (Claude Opus 5 — High). **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
@@ -124,9 +124,10 @@ are never reused.
 
 ### Phase 5 — Release
 
-- ☐ **5.1 — EXIT** — `V` — First release: version chosen by
-  the maintainer, `CHANGELOG.md`, the pin set to the released CLI, published
-  right after the CLI release — PLAN §G9 (M8)
+- ☐ **5.1 — EXIT** — `V` — First release after the swap and the
+  merge: 2.0.0 with its `gui-v2.0.0` bridge release, `CHANGELOG.md`, the
+  pin set to the released CLI, published right after the CLI release —
+  PLAN §G9 (M9)
 
 ## What to do now
 
@@ -164,8 +165,8 @@ binding repository workflow.
 ### Cutting a release (maintainer)
 
 - The CLI release this build pins is published first.
-- The first release only: the `gui-v2.0.0` bridge release beside `v2.0.0`,
-  then the repository swap with its same-day checklist (PLAN §G8).
+- The first release only: after the swap and the merge, the `gui-v2.0.0`
+  bridge release beside `v2.0.0` (PLAN §G8).
 - Changelog dated; candidate dispatched and its packages started on the
   three required platforms; tag; watch the release workflow; check the
   release page and the updater from the previous version.

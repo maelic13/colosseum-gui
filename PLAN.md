@@ -261,17 +261,29 @@ product rules across.
   marked Latest. 1.x's updater reads `maelic13/colosseum` but accepts only
   `gui-v` tags, so the bridge is how installed 1.x copies learn of 2.0.0.
   One bridge is enough; this application's own updater reads `v` tags.
-- **Order.** The CLI release that carries the protocol is tagged first;
-  this application's release follows, pinned to it, in quick succession. A
-  CLI patch never requires a release here; a protocol minor bump does.
-- **The repository swap** (maintainer, once, right after 5.1, CLI
-  ADR-0012). Rename the CLI repository `maelic13/colosseum` to
-  `maelic13/colosseum-cli`, then at once this repository
-  `maelic13/colosseum-gui` to `maelic13/colosseum`. Taking the name ends
-  GitHub's redirect for the old address, so the same day: the address the
-  build fetches the pinned CLI from, and every link to the CLI repository
-  in this repository's documents, move to `maelic13/colosseum-cli`; every
-  clone of the CLI repository updates its `origin`.
+- **Branches.** Work happens on `dev`; `master` holds what is released.
+  Both repositories merge their `dev` once, by one pull request each, after
+  the repository swap. Releases are published only from the default branch.
+- **Order** (CLI ADR-0012, *Branches and order*):
+  1. The CLI release candidate, from the CLI repository's `dev` (CLI 13.8),
+     and this application accepted against it (4.8, M7).
+  2. The repository swap. Rename the CLI repository `maelic13/colosseum` to
+     `maelic13/colosseum-cli`, then at once this repository
+     `maelic13/colosseum-gui` to `maelic13/colosseum`. Taking the name ends
+     GitHub's redirect for the old address, so the same day every clone
+     points its `origin` at the new addresses. Then `dev` is merged into
+     `master` here and into `main` there (CLI 14.1, M8). Every link to the
+     CLI repository in this repository's documents moves to
+     `maelic13/colosseum-cli` in `dev` before that merge.
+  3. The CLI release that carries the protocol, from
+     `maelic13/colosseum-cli`; then this application's 2.0.0 with its
+     bridge release, pinned to it (5.1, CLI 14.2, M9). The build fetches the
+     pinned CLI from `maelic13/colosseum-cli` from the start, because that
+     release is published after the swap.
+  4. The maintainer deletes the 1.x releases from the CLI repository.
+  Between the swap and 5.1, 1.x's updater finds no release here and reports
+  "up to date".
+- A CLI patch never requires a release here; a protocol minor bump does.
 - `CHANGELOG.md` is user-facing; the release notes are its section.
 
 ## G9. Implementation plan
@@ -322,9 +334,9 @@ reason; the recommendation never changes the active model by itself.
 | M4 | Synthetic streams available | 13.2 | 2.3 performance proof |
 | M5 | Live events and control | 13.3, 13.4 | 4.5 on the real CLI; 4.2's lifecycle decision with 13.4 |
 | M6 | Amendments, changed engines, queries | 13.5–13.7 | 4.6 |
-| M7 | CLI release candidate | 13.8 | 4.8 acceptance against it |
-| M8 | Releases in quick succession | the CLI minor release | 5.1, pinned to it |
-| M9 | Retirement of the 1.x application | the repository swap, 14.1, 14.2 | takes `maelic13/colosseum`; the CLI address updated (§G8) |
+| M7 | CLI release candidate | 13.8, from `dev` | 4.8 acceptance against it |
+| M8 | Swap and merges | 14.1: the swap, then `dev` into `main` | takes `maelic13/colosseum`; `dev` into `master` |
+| M9 | Releases in quick succession | 14.2: the CLI release, then the 1.x releases deleted | 5.1, pinned to it, with the bridge release |
 
 ### Phase 1 — Design foundations (documents only)
 
@@ -452,11 +464,12 @@ and behaviour at the §G5 scale.
 
 ### Phase 5 — Release
 
-- **5.1 — EXIT: First release** (`V`). 2.0.0 with its `gui-v2.0.0`
-  bridge release (§G8); `CHANGELOG.md`; the pin set to the released CLI;
-  the release published right after the CLI's, from this repository's own
-  lane. Then the repository swap (§G8), and the 1.x application's
-  retirement (CLI 14.1) may start. (M8)
+- **5.1 — EXIT: First release** (`V`). After the swap and the merge
+  (CLI 14.1): 2.0.0 with its `gui-v2.0.0` bridge release (§G8);
+  `CHANGELOG.md`; the pin set to the released CLI; the release published
+  right after the CLI's, from `master` at `maelic13/colosseum`. Then the
+  maintainer deletes the 1.x releases from the CLI repository (CLI 14.2).
+  (M9)
 
 **Programme exit:** the desktop application released from this repository
 over the protocol, with one game-playing implementation, in the CLI.

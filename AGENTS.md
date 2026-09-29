@@ -18,12 +18,14 @@ the command-line tool **Colosseum CLI** (`colosseum-cli`). A step number
 prefixed `CLI` (`CLI 11.4`) is the CLI repository's; a bare number is a step
 here.
 
-| Repository | Until the swap | After the swap (right after 5.1) |
+| Repository | Until the swap | After the swap (CLI 14.1, before both releases) |
 |---|---|---|
 | This one | `maelic13/colosseum-gui` | `maelic13/colosseum` |
 | The CLI's | `maelic13/colosseum` | `maelic13/colosseum-cli` |
 
-The swap and its same-day checklist are in PLAN §G8
+Work happens on `dev`; `master` holds what is released and receives `dev`
+by one pull request after the swap. The swap, the order of the merges and
+releases and the same-day checklist are in PLAN §G8
 ([CLI ADR-0012](https://github.com/maelic13/colosseum/blob/main/docs/architecture/adr/0012-names-and-repositories-after-the-split.md)).
 
 ## Scope and architecture
@@ -50,7 +52,7 @@ The swap and its same-day checklist are in PLAN §G8
 - The 1.x application source is read for the inventory only, in a checkout
   of the CLI repository beside this one at `gui-v1.1.0`, commit
   `ba308297f8866dc7aa8fd3172730d941e05b3d68` (the tag is deleted at CLI
-  14.1; the commit stays); nothing is copied from it except assets and
+  14.2; the commit stays); nothing is copied from it except assets and
   product rules the inventory keeps.
 - Treat engine crashes and protocol quirks as real, supported conditions:
   every error the CLI reports has a place on a screen.
