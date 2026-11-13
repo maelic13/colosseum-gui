@@ -262,35 +262,40 @@ product rules across.
   there; the two may be installed side by side. Whether its installers
   replace an installed 1.x or coexist with it is decided at 4.7 against the
   1.x installer identities.
-- **Tags and versions.** Plain `v<semver>` tags; this repository starts with
-  none. The first release is **2.0.0**, the Colosseum brand continuing. It
-  is published twice: `v2.0.0`, and a bridge release `gui-v2.0.0` on the
-  same commit with the same assets, neither draft nor prerelease and not
-  marked Latest. 1.x's updater reads `maelic13/colosseum` but accepts only
-  `gui-v` tags, so the bridge is how installed 1.x copies learn of 2.0.0.
-  One bridge is enough; this application's own updater reads `v` tags.
-- **Branches.** Work happens on `dev`; `master` holds what is released.
-  Both repositories merge their `dev` once, by one pull request each, after
-  the repository swap. Releases are published only from the default branch.
-- **Order** (CLI ADR-0012, *Branches and order*):
-  1. The CLI release candidate, from the CLI repository's `dev` (CLI 13.8),
-     and this application accepted against it (4.8, M7).
-  2. The repository swap. Rename the CLI repository `maelic13/colosseum` to
-     `maelic13/colosseum-cli`, then at once this repository
-     `maelic13/colosseum-gui` to `maelic13/colosseum`. Taking the name ends
-     GitHub's redirect for the old address, so the same day every clone
-     points its `origin` at the new addresses. Then `dev` is merged into
-     `master` here and into `main` there (CLI 14.1, M8). Every link to the
-     CLI repository in this repository's documents moves to
-     `maelic13/colosseum-cli` in `dev` before that merge.
-  3. The CLI release that carries the protocol, from
-     `maelic13/colosseum-cli`; then this application's 2.0.0 with its
-     bridge release, pinned to it (5.1, CLI 14.2, M9). The build fetches the
-     pinned CLI from `maelic13/colosseum-cli` from the start, because that
-     release is published after the swap.
-  4. The maintainer deletes the 1.x releases from the CLI repository.
-  Between the swap and 5.1, 1.x's updater finds no release here and reports
-  "up to date".
+- **Tags and versions.** 1.x, in `legacy/` until 2.0.0, keeps its
+  `gui-v1.x.y` tags, released from here after the swap (ADR-0001). The 2.0
+  application uses plain `v<semver>` tags. Its first release is **2.0.0**,
+  the Colosseum brand continuing. It is published twice: `v2.0.0`, and a
+  bridge release `gui-v2.0.0` on the same commit with the same assets,
+  neither draft nor prerelease and not marked Latest. 1.x's updater reads
+  `maelic13/colosseum` but accepts only `gui-v` tags, so the bridge is how
+  installed 1.x copies learn of 2.0.0. One bridge is enough; this
+  application's own updater reads `v` tags.
+- **Branches.** Work happens on `dev`; `master` holds what is released and
+  receives `dev` by pull request at the split and for each release.
+  Releases are published only from the default branch.
+- **Order** ([ADR-0001](docs/architecture/adr/0001-1x-maintained-here-and-the-swap-at-the-split.md),
+  amending CLI ADR-0012 *Branches and order*):
+  1. *The split* (0.1, 0.2; M8). 1.x moves into `legacy/` here and builds,
+     tests and packages; the CLI repository removes it from its `main`.
+  2. *The swap*, by the maintainer. Rename the CLI repository
+     `maelic13/colosseum` to `maelic13/colosseum-cli`, then at once this
+     repository `maelic13/colosseum-gui` to `maelic13/colosseum`. Taking the
+     name ends GitHub's redirect for the old address, so the same day every
+     clone points its `origin` at the new address, Rarog's CLI download
+     address moves, and every link to the CLI repository in this
+     repository's documents moves to `maelic13/colosseum-cli`. Then `dev` is
+     merged into `master` here.
+  3. *The first 1.x release from here*, `gui-v1.1.1` or as the maintainer
+     numbers it, soon after the swap: until then 1.x's update check finds no
+     release and reports "up to date". Then the maintainer deletes the 1.x
+     releases and tags from `maelic13/colosseum-cli`.
+  4. *The end of the programme*: the CLI release candidate (CLI 13.8) and
+     this application accepted against it (4.8, M7); the CLI release that
+     carries the protocol, from `maelic13/colosseum-cli`; then 2.0.0 with its
+     bridge release, pinned to it, in the change that removes `legacy/` and
+     its release lane (5.1, CLI 14.2, M9). The build fetches the pinned CLI
+     from `maelic13/colosseum-cli` from the start.
 - A CLI patch never requires a release here; a protocol minor bump does.
 - `CHANGELOG.md` is user-facing; the release notes are its section.
 
@@ -321,6 +326,8 @@ reason; the recommendation never changes the active model by itself.
 
 | Step | Class |
 |---|---|
+| 0.1 | `R2` |
+| 0.2 | `I2` |
 | 1.1, 1.1.1–1.1.4, 1.2–1.4 | `R2` |
 | 2.1 | `I2` |
 | 2.2 | `I1` |
@@ -343,8 +350,24 @@ reason; the recommendation never changes the active model by itself.
 | M5 | Live events and control | 13.3, 13.4 | 4.5 on the real CLI; 4.2's lifecycle decision with 13.4 |
 | M6 | Amendments, changed engines, queries | 13.5–13.7 | 4.6 |
 | M7 | CLI release candidate | 13.8, from `dev` | 4.8 acceptance against it |
-| M8 | Swap and merges | 14.1: the swap, then `dev` into `main` | takes `maelic13/colosseum`; `dev` into `master` |
-| M9 | Releases in quick succession | 14.2: the CLI release, then the 1.x releases deleted | 5.1, pinned to it, with the bridge release |
+| M8 | The split and the swap (ADR-0001, moved from the end) | 1.x removed from `main`; then the swap | 0.2: 1.x in `legacy/`; takes `maelic13/colosseum`; `dev` into `master`; 1.x released from here, then its releases deleted there |
+| M9 | Releases in quick succession | 14.2: the CLI release | 5.1, pinned to it, with the bridge release; `legacy/` removed |
+
+### Phase 0 — The split (ADR-0001)
+
+- **0.1 — Decide the split** (`R2`). 1.x maintained here in `legacy/`, the
+  swap at the split, the release order and the frozen duplicates recorded
+  in ADR-0001; this plan, `GUIDE.md` and `AGENTS.md` amended.
+  *Exit:* ADR-0001 accepted by the maintainer (2026-11-13).
+- **0.2 — 1.x in `legacy/`** (`I2`). A plain copy of the CLI repository's
+  `main` at `8fa63cc`: the GUI crate and the four crates it builds against,
+  its release tooling reduced to the GUI, its packaging, CI and release
+  lane rooted at `legacy/`, its changelog; a user-facing `README.md` for
+  the repository's new front page.
+  *Exit:* in `legacy/`, formatting, lint and the whole test suite pass and
+  the release binary builds on the maintainer's machine; the CI and release
+  workflows are syntactically valid and run only on `legacy/` changes; the
+  maintainer runs the release lane's candidate after the swap.
 
 ### Phase 1 — Design foundations (documents only)
 
@@ -505,12 +528,11 @@ and behaviour at the §G5 scale.
 
 ### Phase 5 — Release
 
-- **5.1 — EXIT: First release** (`V`). After the swap and the merge
-  (CLI 14.1): 2.0.0 with its `gui-v2.0.0` bridge release (§G8);
-  `CHANGELOG.md`; the pin set to the released CLI; the release published
-  right after the CLI's, from `master` at `maelic13/colosseum`. Then the
-  maintainer deletes the 1.x releases from the CLI repository (CLI 14.2).
-  (M9)
+- **5.1 — EXIT: First release** (`V`). 2.0.0 with its `gui-v2.0.0`
+  bridge release (§G8); `CHANGELOG.md`; the pin set to the released CLI;
+  `legacy/` and its release lane removed in the same change; the release
+  published right after the CLI's (CLI 14.2), from `master` at
+  `maelic13/colosseum`. (M9)
 
 **Programme exit:** the desktop application released from this repository
 over the protocol, with one game-playing implementation, in the CLI.
@@ -541,4 +563,4 @@ over the protocol, with one game-playing implementation, in the CLI.
 | CLI repository `PLAN.md` §S5.15, §S8 | protocol principles; the programme and joint milestones |
 | CLI repository `docs/cli/protocol.md` | the protocol contract; schema and fixtures published with each CLI release |
 | CLI repository `docs/architecture/gui-v2-research.md` | the technology research behind §G4 |
-| CLI repository `gui-v1.1.0` (commit `ba30829`) | the 1.x application, read for the inventory |
+| `legacy/` | the 1.x application, maintained until 2.0.0 and read for the inventory (ADR-0001); CLI repository commit `ba30829` is `gui-v1.1.0` |

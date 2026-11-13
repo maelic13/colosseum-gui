@@ -18,15 +18,21 @@ the command-line tool **Colosseum CLI** (`colosseum-cli`). A step number
 prefixed `CLI` (`CLI 11.4`) is the CLI repository's; a bare number is a step
 here.
 
-| Repository | Until the swap | After the swap (CLI 14.1, before both releases) |
+| Repository | Until the swap | After the swap (at the split, ADR-0001) |
 |---|---|---|
 | This one | `maelic13/colosseum-gui` | `maelic13/colosseum` |
 | The CLI's | `maelic13/colosseum` | `maelic13/colosseum-cli` |
 
-Work happens on `dev`; `master` holds what is released and receives `dev`
-by one pull request after the swap. The swap, the order of the merges and
-releases and the same-day checklist are in PLAN §G8
-([CLI ADR-0012](https://github.com/maelic13/colosseum/blob/main/docs/architecture/adr/0012-names-and-repositories-after-the-split.md)).
+This repository holds both desktop generations until 2.0.0: the 1.x
+application (Rust, egui) in `legacy/`, maintained and released from here as
+`gui-v1.x.y`, and the 2.0 application being designed. Work happens on
+`dev`; `master` holds what is released and receives `dev` by pull request
+at the split and for each release. The swap, the release order and the
+same-day checklist are in PLAN §G8 and
+[ADR-0001](docs/architecture/adr/0001-1x-maintained-here-and-the-swap-at-the-split.md),
+which moved the swap of
+[CLI ADR-0012](https://github.com/maelic13/colosseum/blob/dev/docs/architecture/adr/0012-names-and-repositories-after-the-split.md)
+to the split.
 
 ## Scope and architecture
 
@@ -49,11 +55,13 @@ releases and the same-day checklist are in PLAN §G8
 - **Dependencies where they pay.** Every dependency has a line in
   `docs/dependencies.md` saying why; a dependency that overlaps one already
   taken, or adds weight for little, is refused.
-- The 1.x application source is read for the inventory only, in a checkout
-  of the CLI repository beside this one at `gui-v1.1.0`, commit
-  `ba308297f8866dc7aa8fd3172730d941e05b3d68` (the tag is deleted at CLI
-  14.2; the commit stays); nothing is copied from it except assets and
-  product rules the inventory keeps.
+- **`legacy/` is 1.x, frozen.** It receives the fixes 1.x users need and
+  nothing else: no feature, and no sync from the CLI's crates unless a 1.x
+  fix requires it. The 2.0 application copies nothing from it except assets
+  and the product rules the inventory keeps, and depends on nothing in it.
+  The inventory reads it in place; it differs from `gui-v1.1.0` (commit
+  `ba308297f8866dc7aa8fd3172730d941e05b3d68`) only as ADR-0001 records.
+  `legacy/` is removed in the change that releases 2.0.0.
 - Treat engine crashes and protocol quirks as real, supported conditions:
   every error the CLI reports has a place on a screen.
 

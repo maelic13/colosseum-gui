@@ -13,11 +13,11 @@ argumentation.
 
 | | |
 |---|---|
-| Repository | `maelic13/colosseum-gui`, seeded from the CLI repository at its step 11.2 (`docs/gui-v2/`); takes `maelic13/colosseum` in the swap before both releases (PLAN §G8). Work on `dev`, merged into `master` by one pull request after the swap. No code yet |
-| Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22. It stays on the CLI repository's `main`, patchable, until the merge; it left the CLI repository's `dev` at CLI 11.2.1 (2026-09-29), and 1.x is read at commit `ba30829` |
-| What is missing | Everything: Phase 1 (design foundations), Phase 2 (repository and technology proof), Phase 3 (screen specifications), Phase 4 (implementation), Phase 5 (release) |
+| Repository | `maelic13/colosseum-gui`, seeded from the CLI repository at its step 11.2 (`docs/gui-v2/`); takes `maelic13/colosseum` in the swap at the split (ADR-0001, PLAN §G8). Work on `dev`, merged into `master` at the split and for each release. No 2.0 code yet |
+| Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22 from the CLI repository. From the split it lives here in `legacy/`, frozen but for fixes, released as `gui-v1.x.y` until 2.0.0 replaces it (ADR-0001) |
+| What is missing | Phase 0 (the split), Phase 1 (design foundations), Phase 2 (repository and technology proof), Phase 3 (screen specifications), Phase 4 (implementation), Phase 5 (release) |
 | Depends on Colosseum | 11.4 protocol specification (before Phase 3), 13.2 synthetic streams (before 2.3), 13.3–13.4 (before 4.5; the lifecycle decision with 4.2), 13.5–13.7 (before 4.6), 13.8 release candidate (4.8) — PLAN §G9 joint milestones |
-| Next step | **1.1.1** — the engine-library decisions; Delete All, names and versions and rating lists decided in inventory §12; the rating anchor (Q1) waits for the maintainer — `R2` (Claude Opus 5 — High); then 1.1.2–1.1.4 and 1.2, each `R2`. **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
+| Next step | **0.2** — 1.x into `legacy/` — `I2` (Claude Opus 5 — High), then the CLI repository removes it from `main` and the maintainer performs the swap. Then **1.1.1** — the engine-library decisions; Delete All, names and versions and rating lists decided in inventory §12; the rating anchor (Q1) waits for the maintainer — `R2` (Claude Opus 5 — High); then 1.1.2–1.1.4 and 1.2, each `R2`. **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
 | Confirmed decisions | PLAN §G2 (2026-09-27): design first; a client of the CLI over its protocol; TypeScript + React with shadcn/ui on Radix and Tailwind; the shell a measured choice at 2.3 between Electron and Tauri 2 with Electron the default expectation; placement off, several tournaments at once; 64 participants the design point; lifecycle and close behaviour decided at 4.2 with *stop now on close* the starting preference; amendments and changed engines are CLI mechanisms; run file per tournament, rebuildable index, positions as FEN, no chess logic here; the 1.x library imported, 1.x tournaments not migrated; both themes equal |
 
 ## Current model mapping
@@ -47,6 +47,11 @@ Every phase, step and sub-step is one checkbox line here, ending in its
 class (`IN PROGRESS / <class>` while under way, `DONE <date>` once ticked);
 sub-steps sit indented under their step. PLAN §G9 holds each step's
 specification and exit; `(Mn)` marks a joint milestone.
+
+### Phase 0 — The split (ADR-0001)
+
+- [x] **0.1** Decide the split: 1.x maintained here in `legacy/`, the swap at the split, the release order, frozen duplicates of the CLI crates; ADR-0001, PLAN §G8 and §G9, `AGENTS.md`. The maintainer chose the baseline (`8fa63cc`), the swap now, `legacy/` and a plain copy on 2026-11-13 — DONE 2026-11-13
+- [ ] **0.2** 1.x in `legacy/`: plain copy of CLI `main` at `8fa63cc` (GUI crate, `colosseum-application`, `-core`, `-engine`, `-uci`), release tooling reduced to the GUI, packaging, CI and release lane rooted at `legacy/`, changelog, a user-facing `README.md`; format, lint, tests and the release build pass — **I2**
 
 ### Phase 1 — Design foundations (documents only; sign-offs in pairs)
 
@@ -88,7 +93,8 @@ specification and exit; `(Mn)` marks a joint milestone.
 
 ## What to do now
 
-**Decide 1.1.1–1.1.4, then write 1.2; 2.1 beside them.** The inventory
+**Finish the split first (0.2, then the CLI repository and the swap).**
+Then **decide 1.1.1–1.1.4, then write 1.2; 2.1 beside them.** The inventory
 draft (1.1) is written; its fourteen questions for this repository are
 steps 1.1.1–1.1.4, each answered, dated, in inventory §12. 1.2 carries the
 answers into the requirements and is reviewed with 1.1; when it is signed
@@ -120,6 +126,14 @@ binding repository workflow.
 - A numbered step: update the pin, the bundled binary checksums and the
   contract test's schema and fixtures together; run the end-to-end suite on
   the new synthetic streams; note the protocol version in `CHANGELOG.md`.
+
+### Cutting a 1.x release (maintainer, until 2.0.0)
+
+- A fix lands in `legacy/` on `dev` with its test and a dated section in
+  `legacy/CHANGELOG.md`; the version in `legacy/crates/colosseum-gui/Cargo.toml`.
+- Pull request `dev` → `master`; its GUI candidate builds every artifact.
+- Tag `gui-v1.x.y` on `master`; watch the release workflow; check the release
+  page and the update offer from the previous 1.x.
 
 ### Cutting a release (maintainer)
 
