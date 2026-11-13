@@ -53,7 +53,7 @@ specification and exit; `(Mn)` marks a joint milestone.
 - [x] **0.1** Decide the split: 1.x maintained here in `legacy/`, the swap at the split, the release order, frozen duplicates of the CLI crates; ADR-0001, PLAN §G8 and §G9, `AGENTS.md`. The maintainer chose the baseline (`8fa63cc`), the swap now, `legacy/` and a plain copy on 2026-11-13 — DONE 2026-11-13
     - [x] Revised the same day, before it was acted on: plain `vX.Y.Z` tags with no bridge (1.1.0 copies not offered 1.2.0, accepted), squash pull requests into `master` as Rarog delivers — DONE 2026-11-13
 - [x] **0.2** 1.x in `legacy/`: plain copy of CLI `main` at `8fa63cc` (GUI crate, `colosseum-application`, `-core`, `-engine`, `-uci`), release tooling reduced to the GUI and `vX.Y.Z` tags, packaging, CI and release lane rooted at `legacy/` and gating `master`, changelog, a user-facing `README.md`. In `legacy/`: fmt and clippy clean, 342 tests passed; `cargo xtask package gui --format zip` built and smoke-tested the Windows x64 zip; both workflows parse — DONE 2026-11-13
-- [ ] **0.3** 1.2.0: the update check on plain `vX.Y.Z` tags, version and dated changelog; `release-check v1.2.0` passes but for the tag's place; the split's pull request green in CI and Release — **I1**
+- [ ] **0.3** 1.2.0: the update check on plain `vX.Y.Z` tags, version and dated changelog; `release-check v1.2.0` passes but for the tag's place; the split's pull request green in CI and Release. Done locally 2026-11-13: fmt and clippy clean, 344 tests passed, `cargo xtask release-check v1.2.0` passed; waiting for the pull request's CI and Release — **IN PROGRESS / I1**
 
 ### Phase 1 — Design foundations (documents only; sign-offs in pairs)
 

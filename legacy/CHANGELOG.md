@@ -1,10 +1,38 @@
-# Colosseum GUI changelog
+# Colosseum changelog
 
-All notable changes to Colosseum GUI are documented here.
+All notable changes to Colosseum are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+---
+
+## [1.2.0] — 2026-11-13
+
+Colosseum now has a repository of its own,
+[maelic13/colosseum](https://github.com/maelic13/colosseum), and Colosseum
+CLI moved to [maelic13/colosseum-cli](https://github.com/maelic13/colosseum-cli).
+Releases are now tagged `v1.2.0`, `v1.2.1` and so on.
+
+**Installed 1.1.0 does not notice this release.** Its update check only
+understands the old tag form. Download 1.2.0 from the
+[release list](https://github.com/maelic13/colosseum/releases) by hand
+once; from then on the update check works again, and it will offer
+Colosseum 2.0 when that is out.
+
+### Changed
+- **The update check reads the new `v1.2.0` tag form**
+- **Commands reach the engines sooner and cost less CPU**: each engine has
+  its own thread writing its input. An engine's clock still runs from the
+  `go` to the arrival of its `bestmove`
+- Engine incident reports use plain ASCII dashes, so they read correctly in
+  any editor or console
+
+### Fixed
+- **Threefold repetition counts the position a game starts from**, as the
+  Laws of Chess do: the start position occurring for the third time ends the
+  game as a draw. Before, it needed a fourth occurrence
 
 ---
 
