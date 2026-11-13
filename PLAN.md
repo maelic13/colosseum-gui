@@ -262,40 +262,42 @@ product rules across.
   there; the two may be installed side by side. Whether its installers
   replace an installed 1.x or coexist with it is decided at 4.7 against the
   1.x installer identities.
-- **Tags and versions.** 1.x, in `legacy/` until 2.0.0, keeps its
-  `gui-v1.x.y` tags, released from here after the swap (ADR-0001). The 2.0
-  application uses plain `v<semver>` tags. Its first release is **2.0.0**,
-  the Colosseum brand continuing. It is published twice: `v2.0.0`, and a
-  bridge release `gui-v2.0.0` on the same commit with the same assets,
-  neither draft nor prerelease and not marked Latest. 1.x's updater reads
-  `maelic13/colosseum` but accepts only `gui-v` tags, so the bridge is how
-  installed 1.x copies learn of 2.0.0. One bridge is enough; this
-  application's own updater reads `v` tags.
-- **Branches.** Work happens on `dev`; `master` holds what is released and
-  receives `dev` by pull request at the split and for each release.
-  Releases are published only from the default branch.
+- **Tags and versions.** Plain `vX.Y.Z` tags for both generations
+  (ADR-0001). 1.x, in `legacy/` until 2.0.0, continues as **1.2.0**, whose
+  update check reads `v` tags; installed 1.1.0 copies, which accept only
+  `gui-v` tags, are not offered it, and that is accepted. 2.0's first release
+  is **2.0.0**, the Colosseum brand continuing, and every 1.x from 1.2.0 on
+  is offered it. No bridge release.
+- **Delivery** (as Rarog's). `master` is the trunk. Each larger piece of
+  work lives on its own short-lived branch with its step commits and reaches
+  `master` as one squash commit through a pull request; CI and the release
+  candidate run on it, and the maintainer squash-merges it once both are
+  green. A release is a pull request that dates the changelog and sets the
+  version, then a `vX.Y.Z` tag pushed on the merged `master`; the release
+  workflow validates, builds and publishes it. Pull-request titles and
+  descriptions follow `AGENTS.md`.
 - **Order** ([ADR-0001](docs/architecture/adr/0001-1x-maintained-here-and-the-swap-at-the-split.md),
   amending CLI ADR-0012 *Branches and order*):
-  1. *The split* (0.1, 0.2; M8). 1.x moves into `legacy/` here and builds,
-     tests and packages; the CLI repository removes it from its `main`.
+  1. *The split* (0.1–0.3; M8). 1.x moves into `legacy/` here, builds, tests
+     and packages, and becomes 1.2.0 with an update check on `v` tags. The
+     work reaches `master` by pull request.
   2. *The swap*, by the maintainer. Rename the CLI repository
      `maelic13/colosseum` to `maelic13/colosseum-cli`, then at once this
      repository `maelic13/colosseum-gui` to `maelic13/colosseum`. Taking the
      name ends GitHub's redirect for the old address, so the same day every
      clone points its `origin` at the new address, Rarog's CLI download
      address moves, and every link to the CLI repository in this
-     repository's documents moves to `maelic13/colosseum-cli`. Then `dev` is
-     merged into `master` here.
-  3. *The first 1.x release from here*, `gui-v1.1.1` or as the maintainer
-     numbers it, soon after the swap: until then 1.x's update check finds no
-     release and reports "up to date". Then the maintainer deletes the 1.x
-     releases and tags from `maelic13/colosseum-cli`.
+     repository's documents moves to `maelic13/colosseum-cli`.
+  3. *1.2.0 from here*, soon after the swap: the first release of this
+     repository. Then the maintainer deletes the desktop releases and tags
+     from `maelic13/colosseum-cli`, whose `dev` is brought up to date and
+     merged into its `main` without the GUI (the CLI repository's work).
   4. *The end of the programme*: the CLI release candidate (CLI 13.8) and
      this application accepted against it (4.8, M7); the CLI release that
-     carries the protocol, from `maelic13/colosseum-cli`; then 2.0.0 with its
-     bridge release, pinned to it, in the change that removes `legacy/` and
-     its release lane (5.1, CLI 14.2, M9). The build fetches the pinned CLI
-     from `maelic13/colosseum-cli` from the start.
+     carries the protocol, from `maelic13/colosseum-cli`; then 2.0.0, pinned
+     to it, in the change that removes `legacy/` and its release lane (5.1,
+     CLI 14.2, M9). The build fetches the pinned CLI from
+     `maelic13/colosseum-cli` from the start.
 - A CLI patch never requires a release here; a protocol minor bump does.
 - `CHANGELOG.md` is user-facing; the release notes are its section.
 
@@ -328,6 +330,7 @@ reason; the recommendation never changes the active model by itself.
 |---|---|
 | 0.1 | `R2` |
 | 0.2 | `I2` |
+| 0.3 | `I1` |
 | 1.1, 1.1.1–1.1.4, 1.2–1.4 | `R2` |
 | 2.1 | `I2` |
 | 2.2 | `I1` |
@@ -350,8 +353,8 @@ reason; the recommendation never changes the active model by itself.
 | M5 | Live events and control | 13.3, 13.4 | 4.5 on the real CLI; 4.2's lifecycle decision with 13.4 |
 | M6 | Amendments, changed engines, queries | 13.5–13.7 | 4.6 |
 | M7 | CLI release candidate | 13.8, from `dev` | 4.8 acceptance against it |
-| M8 | The split and the swap (ADR-0001, moved from the end) | 1.x removed from `main`; then the swap | 0.2: 1.x in `legacy/`; takes `maelic13/colosseum`; `dev` into `master`; 1.x released from here, then its releases deleted there |
-| M9 | Releases in quick succession | 14.2: the CLI release | 5.1, pinned to it, with the bridge release; `legacy/` removed |
+| M8 | The split and the swap (ADR-0001, moved from the end) | the swap; `dev` up to date and into `main`, without the GUI; desktop releases deleted after 1.2.0 | 0.2–0.3: 1.x in `legacy/` as 1.2.0; takes `maelic13/colosseum`; 1.2.0 released here |
+| M9 | Releases in quick succession | 14.2: the CLI release | 5.1, pinned to it; `legacy/` removed |
 
 ### Phase 0 — The split (ADR-0001)
 
@@ -361,13 +364,20 @@ reason; the recommendation never changes the active model by itself.
   *Exit:* ADR-0001 accepted by the maintainer (2026-11-13).
 - **0.2 — 1.x in `legacy/`** (`I2`). A plain copy of the CLI repository's
   `main` at `8fa63cc`: the GUI crate and the four crates it builds against,
-  its release tooling reduced to the GUI, its packaging, CI and release
-  lane rooted at `legacy/`, its changelog; a user-facing `README.md` for
-  the repository's new front page.
-  *Exit:* in `legacy/`, formatting, lint and the whole test suite pass and
-  the release binary builds on the maintainer's machine; the CI and release
-  workflows are syntactically valid and run only on `legacy/` changes; the
-  maintainer runs the release lane's candidate after the swap.
+  its release tooling reduced to the GUI and to `vX.Y.Z` tags, its
+  packaging, CI and release lane rooted at `legacy/` and gating `master`,
+  its changelog; a user-facing `README.md` for the repository's new front
+  page.
+  *Exit:* in `legacy/`, formatting, lint and the whole test suite pass on
+  the maintainer's machine; the CI and release workflows parse, target
+  `master` and `vX.Y.Z` tags and run in `legacy/`; their first real run is
+  the split's pull request.
+- **0.3 — 1.2.0** (`I1`). 1.x's update check reads plain `vX.Y.Z` tags and
+  no longer `gui-v` ones; the version is 1.2.0 and the changelog dated.
+  *Exit:* the update check's tests cover `v` tags, `gui-v` tags ignored,
+  prereleases and drafts; `cargo xtask release-check v1.2.0` passes but
+  for the tag's place on `master`; the split's pull request is green in CI
+  and Release.
 
 ### Phase 1 — Design foundations (documents only)
 
@@ -528,11 +538,11 @@ and behaviour at the §G5 scale.
 
 ### Phase 5 — Release
 
-- **5.1 — EXIT: First release** (`V`). 2.0.0 with its `gui-v2.0.0`
-  bridge release (§G8); `CHANGELOG.md`; the pin set to the released CLI;
-  `legacy/` and its release lane removed in the same change; the release
-  published right after the CLI's (CLI 14.2), from `master` at
-  `maelic13/colosseum`. (M9)
+- **5.1 — EXIT: First release** (`V`). 2.0.0 (§G8); `CHANGELOG.md`; the
+  pin set to the released CLI; `legacy/` and its release lane removed in the
+  same change; the release published right after the CLI's (CLI 14.2), from
+  `master` at `maelic13/colosseum`, and offered to 1.2.0 by its update
+  check. (M9)
 
 **Programme exit:** the desktop application released from this repository
 over the protocol, with one game-playing implementation, in the CLI.

@@ -13,11 +13,11 @@ argumentation.
 
 | | |
 |---|---|
-| Repository | `maelic13/colosseum-gui`, seeded from the CLI repository at its step 11.2 (`docs/gui-v2/`); takes `maelic13/colosseum` in the swap at the split (ADR-0001, PLAN §G8). Work on `dev`, merged into `master` at the split and for each release. No 2.0 code yet |
-| Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22 from the CLI repository. From the split it lives here in `legacy/`, frozen but for fixes, released as `gui-v1.x.y` until 2.0.0 replaces it (ADR-0001) |
+| Repository | `maelic13/colosseum-gui`, seeded from the CLI repository at its step 11.2 (`docs/gui-v2/`); takes `maelic13/colosseum` in the swap at the split (ADR-0001, PLAN §G8). `master` is the trunk; work reaches it by squash pull requests from short-lived branches, `dev` the first. No 2.0 code yet |
+| Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22 from the CLI repository. From the split it lives here in `legacy/`, frozen but for fixes, and continues as 1.2.0 on plain `vX.Y.Z` tags until 2.0.0 replaces it; installed 1.1.0 copies are not offered 1.2.0 (ADR-0001) |
 | What is missing | Phase 0 (the split), Phase 1 (design foundations), Phase 2 (repository and technology proof), Phase 3 (screen specifications), Phase 4 (implementation), Phase 5 (release) |
 | Depends on Colosseum | 11.4 protocol specification (before Phase 3), 13.2 synthetic streams (before 2.3), 13.3–13.4 (before 4.5; the lifecycle decision with 4.2), 13.5–13.7 (before 4.6), 13.8 release candidate (4.8) — PLAN §G9 joint milestones |
-| Next step | **0.2** — 1.x into `legacy/` — `I2` (Claude Opus 5 — High), then the CLI repository removes it from `main` and the maintainer performs the swap. Then **1.1.1** — the engine-library decisions; Delete All, names and versions and rating lists decided in inventory §12; the rating anchor (Q1) waits for the maintainer — `R2` (Claude Opus 5 — High); then 1.1.2–1.1.4 and 1.2, each `R2`. **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
+| Next step | **0.2** — 1.x into `legacy/` — `I2` (Claude Opus 5 — High), then **0.3** — 1.2.0 — `I1` (Claude Sonnet 5 — Medium); the split's pull request; the maintainer's swap and 1.2.0. Then **1.1.1** — the engine-library decisions; Delete All, names and versions and rating lists decided in inventory §12; the rating anchor (Q1) waits for the maintainer — `R2` (Claude Opus 5 — High); then 1.1.2–1.1.4 and 1.2, each `R2`. **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
 | Confirmed decisions | PLAN §G2 (2026-09-27): design first; a client of the CLI over its protocol; TypeScript + React with shadcn/ui on Radix and Tailwind; the shell a measured choice at 2.3 between Electron and Tauri 2 with Electron the default expectation; placement off, several tournaments at once; 64 participants the design point; lifecycle and close behaviour decided at 4.2 with *stop now on close* the starting preference; amendments and changed engines are CLI mechanisms; run file per tournament, rebuildable index, positions as FEN, no chess logic here; the 1.x library imported, 1.x tournaments not migrated; both themes equal |
 
 ## Current model mapping
@@ -51,7 +51,9 @@ specification and exit; `(Mn)` marks a joint milestone.
 ### Phase 0 — The split (ADR-0001)
 
 - [x] **0.1** Decide the split: 1.x maintained here in `legacy/`, the swap at the split, the release order, frozen duplicates of the CLI crates; ADR-0001, PLAN §G8 and §G9, `AGENTS.md`. The maintainer chose the baseline (`8fa63cc`), the swap now, `legacy/` and a plain copy on 2026-11-13 — DONE 2026-11-13
-- [ ] **0.2** 1.x in `legacy/`: plain copy of CLI `main` at `8fa63cc` (GUI crate, `colosseum-application`, `-core`, `-engine`, `-uci`), release tooling reduced to the GUI, packaging, CI and release lane rooted at `legacy/`, changelog, a user-facing `README.md`; format, lint, tests and the release build pass — **I2**
+    - [x] Revised the same day, before it was acted on: plain `vX.Y.Z` tags with no bridge (1.1.0 copies not offered 1.2.0, accepted), squash pull requests into `master` as Rarog delivers — DONE 2026-11-13
+- [ ] **0.2** 1.x in `legacy/`: plain copy of CLI `main` at `8fa63cc` (GUI crate, `colosseum-application`, `-core`, `-engine`, `-uci`), release tooling reduced to the GUI and `vX.Y.Z` tags, packaging, CI and release lane rooted at `legacy/` and gating `master`, changelog, a user-facing `README.md`; format, lint and tests pass — **I2**
+- [ ] **0.3** 1.2.0: the update check on plain `vX.Y.Z` tags, version and dated changelog; `release-check v1.2.0` passes but for the tag's place; the split's pull request green in CI and Release — **I1**
 
 ### Phase 1 — Design foundations (documents only; sign-offs in pairs)
 
@@ -89,7 +91,7 @@ specification and exit; `(Mn)` marks a joint milestone.
 
 ### Phase 5 — Release
 
-- [ ] **5.1** EXIT — First release after the swap and the merge: 2.0.0 with its `gui-v2.0.0` bridge release, `CHANGELOG.md`, the pin set to the released CLI, published right after the CLI release (M9) — **V**
+- [ ] **5.1** EXIT — First 2.x release: 2.0.0, `CHANGELOG.md`, the pin set to the released CLI, `legacy/` removed, published right after the CLI release and offered to 1.2.0 (M9) — **V**
 
 ## What to do now
 
@@ -127,19 +129,37 @@ binding repository workflow.
   contract test's schema and fixtures together; run the end-to-end suite on
   the new synthetic streams; note the protocol version in `CHANGELOG.md`.
 
+### Pull requests
+
+- One larger piece of work per short-lived branch, its step commits on it;
+  merge `master` into the branch first if `master` moved.
+- The title and description become the squash commit (`AGENTS.md`, *Pull
+  requests*). CI and Release run on it; squash-merge once both are green,
+  then delete the branch.
+
 ### Cutting a 1.x release (maintainer, until 2.0.0)
 
-- A fix lands in `legacy/` on `dev` with its test and a dated section in
-  `legacy/CHANGELOG.md`; the version in `legacy/crates/colosseum-gui/Cargo.toml`.
-- Pull request `dev` → `master`; its GUI candidate builds every artifact.
-- Tag `gui-v1.x.y` on `master`; watch the release workflow; check the release
-  page and the update offer from the previous 1.x.
+- On a release branch: date `legacy/CHANGELOG.md`'s section and set the
+  version in `legacy/crates/colosseum-gui/Cargo.toml`. Its pull request,
+  titled `Release X.Y.Z`, runs the release check and the full candidate.
+- On the merged `master`:
+
+  ```
+  git fetch origin
+  git checkout origin/master --detach
+  cd legacy
+  cargo xtask release-check vX.Y.Z
+  git tag vX.Y.Z
+  git push origin vX.Y.Z
+  ```
+
+- Watch the release workflow; check the release page and the update offer
+  from the previous 1.x. A failed run is repaired by deleting the tag,
+  fixing `master` and tagging again.
 
 ### Cutting a release (maintainer)
 
 - The CLI release this build pins is published first.
-- The first release only: after the swap and the merge, the `gui-v2.0.0`
-  bridge release beside `v2.0.0` (PLAN §G8).
 - Changelog dated; candidate dispatched and its packages started on the
   three required platforms; tag; watch the release workflow; check the
   release page and the updater from the previous version.

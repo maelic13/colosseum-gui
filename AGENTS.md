@@ -24,11 +24,11 @@ here.
 | The CLI's | `maelic13/colosseum` | `maelic13/colosseum-cli` |
 
 This repository holds both desktop generations until 2.0.0: the 1.x
-application (Rust, egui) in `legacy/`, maintained and released from here as
-`gui-v1.x.y`, and the 2.0 application being designed. Work happens on
-`dev`; `master` holds what is released and receives `dev` by pull request
-at the split and for each release. The swap, the release order and the
-same-day checklist are in PLAN §G8 and
+application (Rust, egui) in `legacy/`, maintained and released from here,
+and the 2.0 application being designed. Releases are plain `vX.Y.Z` tags on
+`master`. `master` is the trunk: work reaches it as squash pull requests
+from short-lived branches (*Pull requests* below). The swap, the release
+order and the same-day checklist are in PLAN §G8 and
 [ADR-0001](docs/architecture/adr/0001-1x-maintained-here-and-the-swap-at-the-split.md),
 which moved the swap of
 [CLI ADR-0012](https://github.com/maelic13/colosseum/blob/dev/docs/architecture/adr/0012-names-and-repositories-after-the-split.md)
@@ -71,7 +71,26 @@ One numbered `GUIDE.md` item is the normal unit of work.
 
 Agents work locally only: create the required commits, but never push,
 fetch, create tags, releases or pull requests, or perform other remote
-operations. The maintainer owns every remote operation.
+operations. The maintainer owns every remote operation. An agent may draft
+a pull request's title and description for the maintainer to use.
+
+### Pull requests
+
+`master` is the trunk. Each larger piece of work (a phase, or a coherent
+group of steps) lives on its own short-lived branch with its step commits,
+and reaches `master` as one squash commit through a pull request the
+maintainer merges once CI and Release are green. Merge `master` into the
+branch first if it moved. The title and description become the squash
+commit's message, as Rarog writes them:
+
+- **Title:** a short imperative saying what changed for the product
+  ("Move the 1.x application here and release it as 1.2.0"); no step
+  number, phase or result. A release is titled `Release X.Y.Z`.
+- **Description:** a few plain lines on what and why, wrapped at 72
+  columns. Secondary changes follow in one paragraph opening "Also:". Then
+  the evidence, one line each: the checks run and their counts
+  (`legacy/: fmt, clippy clean; 512 tests passed`), a design sign-off or
+  measurement where the step had one. No attribution.
 
 `PLAN.md` §G9 records each open step's capability class (`R3`, `R2`, `I2`,
 `I1`, `M`, `V`), mirrored on the numbered `GUIDE.md` item; `GUIDE.md`'s
@@ -120,6 +139,10 @@ linter, type check, unit tests, component screenshot tests in both themes,
 end-to-end tests against the CLI's synthetic streams, and the protocol
 contract test against the pinned CLI's published fixtures. A formatting or
 lint failure is a failure.
+
+A change under `legacy/` runs, in `legacy/`: `cargo fmt --all --check`,
+`cargo clippy --locked --workspace --all-targets -- -D warnings` and
+`cargo test --locked --workspace --all-targets`, as its CI does.
 
 ## Documentation ownership
 
