@@ -125,6 +125,10 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # Nothing is checked out here, so there is no `legacy/` to run in.
+    defaults:
+      run:
+        working-directory: .
     steps:
       - name: Every CI job succeeded
         env:

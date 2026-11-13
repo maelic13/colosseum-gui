@@ -237,7 +237,9 @@ jobs:
       # base-devel has the toolchain and makepkg; add rust + the same GUI build
       # deps the Ubuntu leg installs (gtk3 for the rfd file dialogs, xkbcommon
       # for winit).
+      # Before the checkout there is no `legacy/` to run in.
       - name: Install build dependencies
+        working-directory: .
         run: pacman -Syu --noconfirm --needed git rust gtk3 libxkbcommon openssl
 
       - uses: actions/checkout@v7
