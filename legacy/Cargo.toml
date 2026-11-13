@@ -1,0 +1,39 @@
+[workspace]
+resolver = "2"
+members = ["crates/*", "tools/release", "tools/xtask"]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.88"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/maelic13/colosseum"
+authors = ["Miloslav Macůrek <macurek.m@gmail.com>"]
+
+# The 1.x desktop application, frozen but for fixes (ADR-0001).
+
+# ── Release profile ───────────────────────────────────────────────────────────
+# Optimize the shipped binary; engine I/O timing benefits from opt builds.
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true
+
+# ── Debug hashing ─────────────────────────────────────────────────────────────
+# Runs hash their engine executables. Unoptimized SHA-256 spends a third of a
+# second on one debug-sized binary, which every test that launches a run pays;
+# optimizing this one dependency makes it a few milliseconds.
+[profile.dev.package.sha2]
+opt-level = 3
+
+# ── Optimized test profile ────────────────────────────────────────────────────
+# The release test leg exists to run the suite with optimizations on, assertions
+# off and overflow checks off. Whole-program LTO and one codegen unit per crate
+# are distribution settings: they change no behaviour the suite can observe, but
+# applied to forty test binaries they cost minutes on every CI leg. Symbols are
+# kept so a failure in CI still has a backtrace.
+[profile.ci-release]
+inherits = "release"
+lto = false
+codegen-units = 16
+strip = "none"
