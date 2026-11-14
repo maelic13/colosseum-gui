@@ -14,10 +14,10 @@ argumentation.
 | | |
 |---|---|
 | Repository | `maelic13/colosseum` since the swap of 2026-11-13 (formerly `maelic13/colosseum-gui`, seeded from the CLI repository at its step 11.2); the CLI is `maelic13/colosseum-cli` (ADR-0001, PLAN §G8). `master` is the trunk, protected; work reaches it by squash pull requests from short-lived branches (*Repository settings* below). No 2.0 code yet |
-| Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22 from the CLI repository. Since the split it lives here in `legacy/`, frozen but for fixes, and continues as 1.2.0 on plain `vX.Y.Z` tags until 2.0.0 replaces it; installed 1.1.0 copies are not offered 1.2.0 (ADR-0001) |
-| What is missing | The 1.2.0 release and the CLI repository's clean-up (PLAN §G8 *Order* 3), Phase 1 (design foundations), Phase 2 (repository and technology proof), Phase 3 (screen specifications), Phase 4 (implementation), Phase 5 (release) |
+| Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22 from the CLI repository. Since the split it lives here in `legacy/`, frozen but for fixes, and continues on plain `vX.Y.Z` tags until 2.0.0 replaces it: **1.2.0**, released here 2026-11-14 from `63ca788`; installed 1.1.0 copies are not offered it (ADR-0001) |
+| What is missing | The CLI repository's clean-up and Rarog's CLI download address, both outside this repository (PLAN §G8 *Order* 3), Phase 1 (design foundations), Phase 2 (repository and technology proof), Phase 3 (screen specifications), Phase 4 (implementation), Phase 5 (release) |
 | Depends on Colosseum CLI | 11.4 protocol specification (before Phase 3), 13.2 synthetic streams (before 2.3), 13.3–13.4 (before 4.5; the lifecycle decision with 4.2), 13.5–13.7 (before 4.6), 13.8 release candidate (4.8) — PLAN §G9 joint milestones |
-| Next step | The maintainer: protect `master` and release 1.2.0 (*Repository settings*, *Cutting a 1.x release*). Then **1.1.1** — the engine-library decisions; Delete All, names and versions and rating lists decided in inventory §12; the rating anchor (Q1) waits for the maintainer — `R2` (Claude Opus 5 — High); then 1.1.2–1.1.4 and 1.2, each `R2`. **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
+| Next step | **1.1.1** — the engine-library decisions; Delete All, names and versions and rating lists decided in inventory §12; the rating anchor (Q1) waits for the maintainer — `R2` (Claude Opus 5 — High); then 1.1.2–1.1.4 and 1.2, each `R2`. **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
 | Confirmed decisions | PLAN §G2 (2026-09-27): design first; a client of the CLI over its protocol; TypeScript + React with shadcn/ui on Radix and Tailwind; the shell a measured choice at 2.3 between Electron and Tauri 2 with Electron the default expectation; placement off, several tournaments at once; 64 participants the design point; lifecycle and close behaviour decided at 4.2 with *stop now on close* the starting preference; amendments and changed engines are CLI mechanisms; run file per tournament, rebuildable index, positions as FEN, no chess logic here; the 1.x library imported, 1.x tournaments not migrated; both themes equal. Repository tools in platform-neutral Python, developed on Windows for now (PLAN §G4 *Tooling*, 2026-11-14) |
 
 ## Current model mapping
@@ -95,10 +95,10 @@ specification and exit; `(Mn)` marks a joint milestone.
 
 ## What to do now
 
-**Release 1.2.0 first** (the maintainer): `master` protected as
-*Repository settings* says, then *Cutting a 1.x release*; then the CLI
-repository's clean-up (PLAN §G8 *Order* 3) and Rarog's CLI download address.
-Then **decide 1.1.1–1.1.4, then write 1.2; 2.1 beside them.** The inventory
+**1.2.0 is out** (2026-11-14). Outside this repository the CLI repository's
+clean-up (PLAN §G8 *Order* 3) and Rarog's CLI download address remain, the
+maintainer's work there. Here: **decide 1.1.1–1.1.4, then write 1.2; 2.1
+beside them.** The inventory
 draft (1.1) is written; its fourteen questions for this repository are
 steps 1.1.1–1.1.4, each answered, dated, in inventory §12. 1.2 carries the
 answers into the requirements and is reviewed with 1.1; when it is signed
@@ -138,7 +138,7 @@ binding repository workflow.
 - The title and description become the squash commit (`AGENTS.md`, *Pull
   requests*). CI and Release run on it; squash-merge once both are green
   (the merge box is already filled from the title and description; check
-  it, do not retype it). GitHub deletes the branch; delete the local one.
+  it, do not retype it, and remove the ` (#N)` GitHub appends to the title). GitHub deletes the branch; delete the local one.
 - If `master` moved, press *Update branch* on the pull request (a merge of
   `master` into the branch) or merge it locally; never rebase a pushed
   branch.
@@ -177,7 +177,9 @@ after any change to the workflows' job names.
 - **Settings → General → Pull Requests:** *Allow squash merging* only
   (merge commits and rebase merging off), its default message *Pull request
   title and description*; *Always suggest updating pull request branches*
-  on; *Automatically delete head branches* on.
+  on; *Automatically delete head branches* on; *Allow auto-merge* on (a
+  pull request merges itself once its required checks pass, with the
+  squash title set when auto-merge is turned on, without GitHub's ` (#N)`).
 - **Settings → General → Features:** Wiki and Projects off.
 - **Settings → Rules → Rulesets → New branch ruleset** `master`:
   enforcement *Active*, no bypass list, target the default branch; *Restrict

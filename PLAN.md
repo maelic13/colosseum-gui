@@ -302,9 +302,9 @@ product rules across.
      Rarog's CLI download address (`tools/colosseum/colosseum.pin.json`)
      moves, and every link to the CLI repository here names
      `maelic13/colosseum-cli` (moved 2026-11-14).
-  3. *1.2.0 from here*, soon after the swap: the first release of this
-     repository, once `master` is protected (`GUIDE.md`, *Repository
-     settings*). Then the maintainer deletes the desktop releases and tags
+  3. *1.2.0 from here*, done 2026-11-14: the first release of this
+     repository, from the protected `master` (`63ca788`). Then the
+     maintainer deletes the desktop releases and tags
      from `maelic13/colosseum-cli` (`v1.0.0` to `v1.0.2`, `gui-v1.1.0`),
      whose `dev` is brought up to date and merged into its `master` without
      the GUI (the CLI repository's work).
