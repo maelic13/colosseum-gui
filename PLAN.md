@@ -292,9 +292,9 @@ product rules across.
   descriptions follow `AGENTS.md`.
 - **Order** ([ADR-0001](docs/architecture/adr/0001-1x-maintained-here-and-the-swap-at-the-split.md),
   amending CLI ADR-0012 *Branches and order*):
-  1. *The split* (0.1–0.3; M8). 1.x moves into `legacy/` here, builds, tests
-     and packages, and becomes 1.2.0 with an update check on `v` tags. The
-     work reaches `master` by pull request.
+  1. *The split* (Phase 0, done 2026-11-14; M8). 1.x moves into
+     `legacy/` here, builds, tests and packages, and becomes 1.2.0 with an
+     update check on `v` tags. The work reaches `master` by pull request.
   2. *The swap*, by the maintainer, done 2026-11-13: the CLI repository is
      `maelic13/colosseum-cli` (its `main` renamed `master`), this one
      `maelic13/colosseum`. Taking the name ended GitHub's redirect for the
@@ -344,9 +344,6 @@ reason; the recommendation never changes the active model by itself.
 
 | Step | Class |
 |---|---|
-| 0.1 | `R2` |
-| 0.2 | `I2` |
-| 0.3 | `I1` |
 | 1.1, 1.1.1–1.1.4, 1.2–1.4 | `R2` |
 | 2.1 | `I2` |
 | 2.2 | `I1` |
@@ -369,31 +366,8 @@ reason; the recommendation never changes the active model by itself.
 | M5 | Live events and control | 13.3, 13.4 | 4.5 on the real CLI; 4.2's lifecycle decision with 13.4 |
 | M6 | Amendments, changed engines, queries | 13.5–13.7 | 4.6 |
 | M7 | CLI release candidate | 13.8, from `dev` | 4.8 acceptance against it |
-| M8 | The split and the swap (ADR-0001, moved from the end) | the swap; `dev` up to date and into `master`, without the GUI; desktop releases deleted after 1.2.0 | 0.2–0.3: 1.x in `legacy/` as 1.2.0; takes `maelic13/colosseum`; 1.2.0 released here |
+| M8 | The split and the swap (ADR-0001, moved from the end) | the swap; `dev` up to date and into `master`, without the GUI; desktop releases deleted after 1.2.0 | Phase 0, done 2026-11-14: 1.x in `legacy/`; takes `maelic13/colosseum`; 1.2.0 released here |
 | M9 | Releases in quick succession | 14.2: the CLI release | 5.1, pinned to it; `legacy/` removed |
-
-### Phase 0 — The split (ADR-0001)
-
-- **0.1 — Decide the split** (`R2`). 1.x maintained here in `legacy/`, the
-  swap at the split, the release order and the frozen duplicates recorded
-  in ADR-0001; this plan, `GUIDE.md` and `AGENTS.md` amended.
-  *Exit:* ADR-0001 accepted by the maintainer (2026-11-13).
-- **0.2 — 1.x in `legacy/`** (`I2`). A plain copy of the CLI repository's
-  `main` at `8fa63cc`: the GUI crate and the four crates it builds against,
-  its release tooling reduced to the GUI and to `vX.Y.Z` tags, its
-  packaging, CI and release lane rooted at `legacy/` and gating `master`,
-  its changelog; a user-facing `README.md` for the repository's new front
-  page.
-  *Exit:* in `legacy/`, formatting, lint and the whole test suite pass on
-  the maintainer's machine; the CI and release workflows parse, target
-  `master` and `vX.Y.Z` tags and run in `legacy/`; their first real run is
-  the split's pull request.
-- **0.3 — 1.2.0** (`I1`). 1.x's update check reads plain `vX.Y.Z` tags and
-  no longer `gui-v` ones; the version is 1.2.0 and the changelog dated.
-  *Exit:* the update check's tests cover `v` tags, `gui-v` tags ignored,
-  prereleases and drafts; `cargo xtask release-check v1.2.0` passes but
-  for the tag's place on `master`; the split's pull request is green in CI
-  and Release.
 
 ### Phase 1 — Design foundations (documents only)
 
