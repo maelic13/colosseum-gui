@@ -114,7 +114,7 @@ them (the repository fills the squash message from them, `GUIDE.md`,
 *Repository settings*):
 
 - **Title:** a short imperative saying what changed for the product
-  ("Move the 1.x application here and release it as 1.2.0"); no step
+  ("Move the 1.x application", "Finish the repository swap"); no step
   number, phase or result. A release is titled `Release X.Y.Z`.
 - **Description:** a few plain lines on what and why, wrapped at 72
   columns. Secondary changes follow in one paragraph opening "Also:". Then
