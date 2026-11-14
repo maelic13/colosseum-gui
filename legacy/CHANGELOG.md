@@ -8,12 +8,11 @@ Versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [1.2.0] — 2026-11-13
+## [1.2.0] — 2026-11-14
 
 Colosseum now has a repository of its own,
-[maelic13/colosseum](https://github.com/maelic13/colosseum), and Colosseum
-CLI moved to [maelic13/colosseum-cli](https://github.com/maelic13/colosseum-cli).
-Releases are now tagged `v1.2.0`, `v1.2.1` and so on.
+[maelic13/colosseum](https://github.com/maelic13/colosseum). Releases are
+now tagged `v1.2.0`, `v1.2.1` and so on.
 
 **Installed 1.1.0 does not notice this release.** Its update check only
 understands the old tag form. Download 1.2.0 from the
@@ -38,14 +37,12 @@ Colosseum 2.0 when that is out.
 
 ## [1.1.0] — 2026-09-22
 
-The first release from the shared code base with Colosseum CLI. The GUI
-itself changes little; the engine-playing core underneath it is the one the
-CLI was built and tested on.
+The application itself changes little; underneath, it now plays its games
+on a new, more thoroughly tested engine-playing core.
 
 **Installed 1.0.2 does not notice this release.** Its update check only
-understands the old tag form. Download 1.1.0 from the
-[GUI release list](https://github.com/maelic13/colosseum/releases?q=tag%3Agui-v)
-by hand once; from then on the update check works again.
+understands the old tag form. Download 1.1.0 by hand once; from then on
+the update check works again.
 
 ### Added
 - **`colosseum --version`** prints the installed version and exits
@@ -54,9 +51,8 @@ by hand once; from then on the update check works again.
   `{book}` on pre-played opening moves, and the `OpeningPlyCount`,
   `WhiteTimeMarginMs` and `BlackTimeMarginMs` tags, so a game can be
   analysed elsewhere without the log
-- **`Fixed` column** in the standings CSV export, `no` on every row (the
-  GUI has no pinned ratings; the column keeps the export compatible with
-  the CLI's)
+- **`Fixed` column** in the standings CSV export, `no` on every row
+  (Colosseum has no pinned ratings)
 
 ### Changed
 - **A game whose engine could not start is no longer scored.** When a
@@ -332,8 +328,5 @@ UCI pondering, and Linux packages.
 
 ---
 
-[Unreleased]: https://github.com/maelic13/colosseum/compare/v1.0.2...HEAD
-[1.0.2]: https://github.com/maelic13/colosseum/releases/tag/v1.0.2
-[1.0.1]: https://github.com/maelic13/colosseum/releases/tag/v1.0.1
-[1.0.0]: https://github.com/maelic13/colosseum/releases/tag/v1.0.0
-[0.1.0]: https://github.com/maelic13/colosseum/releases/tag/v0.1.0
+[Unreleased]: https://github.com/maelic13/colosseum/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/maelic13/colosseum/releases/tag/v1.2.0
