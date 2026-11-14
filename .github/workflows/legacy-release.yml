@@ -217,7 +217,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: gui-artifacts-${{ matrix.platform }}-${{ matrix.arch }}
-          path: legacy/target/dist/colosseum-gui-*
+          path: legacy/target/dist/colosseum-*
           if-no-files-found: error
           retention-days: 30
 
@@ -259,7 +259,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: gui-artifacts-linux-arch
-          path: legacy/target/dist/colosseum-gui-*.pkg.tar.zst
+          path: legacy/target/dist/colosseum-*.pkg.tar.zst
           if-no-files-found: error
           retention-days: 30
 
@@ -308,20 +308,20 @@ jobs:
         run: |
           version='${{ needs.validate.outputs.version }}'
           expected=(
-            "colosseum-gui-${version}-windows-x64.zip"
-            "colosseum-gui-${version}-windows-arm64.zip"
-            "colosseum-gui-${version}-linux-x64.tar.gz"
-            "colosseum-gui-${version}-linux-x64.deb"
-            "colosseum-gui-${version}-linux-x64.rpm"
-            "colosseum-gui-${version}-linux-x64.pkg.tar.zst"
-            "colosseum-gui-${version}-macos-arm64.tar.gz"
-            "colosseum-gui-${version}-macos-arm64.dmg"
+            "colosseum-${version}-windows-x64.zip"
+            "colosseum-${version}-windows-arm64.zip"
+            "colosseum-${version}-linux-x64.tar.gz"
+            "colosseum-${version}-linux-x64.deb"
+            "colosseum-${version}-linux-x64.rpm"
+            "colosseum-${version}-linux-x64.pkg.tar.zst"
+            "colosseum-${version}-macos-arm64.tar.gz"
+            "colosseum-${version}-macos-arm64.dmg"
           )
           # A prerelease ships no Windows installers.
           if [[ '${{ needs.validate.outputs.prerelease }}' != 'true' ]]; then
             expected+=(
-              "colosseum-gui-${version}-windows-x64.msi"
-              "colosseum-gui-${version}-windows-arm64.msi"
+              "colosseum-${version}-windows-x64.msi"
+              "colosseum-${version}-windows-arm64.msi"
             )
           fi
           ls -lh release-artifacts/
@@ -417,6 +417,6 @@ jobs:
           # nothing an attacker who can replace one cannot also replace. The
           # per-asset digests GitHub records are the ones to compare against.
           files: |
-            release-artifacts/colosseum-gui-*
+            release-artifacts/colosseum-*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

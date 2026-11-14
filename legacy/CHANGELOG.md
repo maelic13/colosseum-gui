@@ -22,6 +22,8 @@ Colosseum 2.0 when that is out.
 
 ### Changed
 - **The update check reads the new `v1.2.0` tag form**
+- **Download files are named `colosseum-<version>-<platform>-<arch>`**,
+  without the former `-gui`
 - **Commands reach the engines sooner and cost less CPU**: each engine has
   its own thread writing its input. An engine's clock still runs from the
   `go` to the arrival of its `bestmove`

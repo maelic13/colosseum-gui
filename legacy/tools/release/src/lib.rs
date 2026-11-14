@@ -233,7 +233,7 @@ fn product(name: &str) -> Result<Product, MetadataError> {
             package: "colosseum-gui",
             manifest: "crates/colosseum-gui/Cargo.toml",
             changelog: "CHANGELOG.md",
-            artifact_name: "colosseum-gui",
+            artifact_name: "colosseum",
             tag_prefix: "v",
         }),
         _ => Err(MetadataError::Product),
@@ -290,7 +290,7 @@ mod tests {
         let root = fixture();
         let gui = validate(root.path(), "v1.2.3").unwrap();
         assert_eq!(gui.package, "colosseum-gui");
-        assert_eq!(gui.artifact_stem, "colosseum-gui-1.2.3");
+        assert_eq!(gui.artifact_stem, "colosseum-1.2.3");
         assert_eq!(gui.validation, "release");
         for tag in ["cli-v1.2.3", "gui-v1.2.3"] {
             assert!(
