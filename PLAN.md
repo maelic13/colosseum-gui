@@ -279,7 +279,9 @@ product rules across.
   update check reads `v` tags; installed 1.1.0 copies, which accept only
   `gui-v` tags, are not offered it, and that is accepted. 2.0's first release
   is **2.0.0**, the Colosseum brand continuing, and every 1.x from 1.2.0 on
-  is offered it. No bridge release.
+  is offered it. No bridge release. A release is named `Colosseum X.Y.Z`
+  on its release page (`Colosseum 1.2.0`, `Colosseum 2.0.0`); only the tag
+  carries the `v`.
 - **Delivery** (as Rarog's). `master` is the trunk. Each larger piece of
   work lives on its own short-lived branch with its step commits and reaches
   `master` as one squash commit through a pull request; CI and the release
