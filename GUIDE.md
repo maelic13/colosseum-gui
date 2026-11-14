@@ -162,7 +162,8 @@ binding repository workflow.
   ```
 
 - Watch the release workflow (`gh run watch`); it publishes only once every
-  build has passed. Check the release page and the update offer from the
+  build has passed, as `Colosseum X.Y.Z` (no `v` in the name; PLAN §G8,
+  *Tags and versions*). Check the release page and the update offer from the
   previous 1.x.
 - A failed run is repaired by deleting the tag
   (`git push origin :refs/tags/vX.Y.Z; git tag -d vX.Y.Z`), fixing `master`

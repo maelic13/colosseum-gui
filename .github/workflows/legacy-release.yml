@@ -405,7 +405,9 @@ jobs:
       - name: Publish the release
         uses: softprops/action-gh-release@v3
         with:
-          name: Colosseum v${{ needs.validate.outputs.version }}
+          # The release is named by its version, `Colosseum X.Y.Z`; only the
+          # tag carries the `v`.
+          name: Colosseum ${{ needs.validate.outputs.version }}
           body_path: release-artifacts/RELEASE-NOTES.md
           prerelease: ${{ needs.validate.outputs.prerelease == 'true' }}
           # A stable release claims "latest"; a prerelease never does.
