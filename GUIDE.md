@@ -13,12 +13,12 @@ argumentation.
 
 | | |
 |---|---|
-| Repository | `maelic13/colosseum-gui`, seeded from the CLI repository at its step 11.2 (`docs/gui-v2/`); takes `maelic13/colosseum` in the swap at the split (ADR-0001, PLAN §G8). `master` is the trunk; work reaches it by squash pull requests from short-lived branches, `dev` the first. No 2.0 code yet |
-| Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22 from the CLI repository. From the split it lives here in `legacy/`, frozen but for fixes, and continues as 1.2.0 on plain `vX.Y.Z` tags until 2.0.0 replaces it; installed 1.1.0 copies are not offered 1.2.0 (ADR-0001) |
-| What is missing | Phase 0 (the split), Phase 1 (design foundations), Phase 2 (repository and technology proof), Phase 3 (screen specifications), Phase 4 (implementation), Phase 5 (release) |
-| Depends on Colosseum | 11.4 protocol specification (before Phase 3), 13.2 synthetic streams (before 2.3), 13.3–13.4 (before 4.5; the lifecycle decision with 4.2), 13.5–13.7 (before 4.6), 13.8 release candidate (4.8) — PLAN §G9 joint milestones |
-| Next step | **0.3** — 1.2.0 — `I1` (Claude Sonnet 5 — Medium); the split's pull request; the maintainer's swap and 1.2.0. Then **1.1.1** — the engine-library decisions; Delete All, names and versions and rating lists decided in inventory §12; the rating anchor (Q1) waits for the maintainer — `R2` (Claude Opus 5 — High); then 1.1.2–1.1.4 and 1.2, each `R2`. **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
-| Confirmed decisions | PLAN §G2 (2026-09-27): design first; a client of the CLI over its protocol; TypeScript + React with shadcn/ui on Radix and Tailwind; the shell a measured choice at 2.3 between Electron and Tauri 2 with Electron the default expectation; placement off, several tournaments at once; 64 participants the design point; lifecycle and close behaviour decided at 4.2 with *stop now on close* the starting preference; amendments and changed engines are CLI mechanisms; run file per tournament, rebuildable index, positions as FEN, no chess logic here; the 1.x library imported, 1.x tournaments not migrated; both themes equal |
+| Repository | `maelic13/colosseum` since the swap of 2026-11-13 (formerly `maelic13/colosseum-gui`, seeded from the CLI repository at its step 11.2); the CLI is `maelic13/colosseum-cli` (ADR-0001, PLAN §G8). `master` is the trunk, protected; work reaches it by squash pull requests from short-lived branches (*Repository settings* below). No 2.0 code yet |
+| Predecessor | Colosseum GUI 1.1.0 (egui), released 2026-09-22 from the CLI repository. Since the split it lives here in `legacy/`, frozen but for fixes, and continues as 1.2.0 on plain `vX.Y.Z` tags until 2.0.0 replaces it; installed 1.1.0 copies are not offered 1.2.0 (ADR-0001) |
+| What is missing | The 1.2.0 release and the CLI repository's clean-up (PLAN §G8 *Order* 3), Phase 1 (design foundations), Phase 2 (repository and technology proof), Phase 3 (screen specifications), Phase 4 (implementation), Phase 5 (release) |
+| Depends on Colosseum CLI | 11.4 protocol specification (before Phase 3), 13.2 synthetic streams (before 2.3), 13.3–13.4 (before 4.5; the lifecycle decision with 4.2), 13.5–13.7 (before 4.6), 13.8 release candidate (4.8) — PLAN §G9 joint milestones |
+| Next step | The maintainer: protect `master` and release 1.2.0 (*Repository settings*, *Cutting a 1.x release*). Then **1.1.1** — the engine-library decisions; Delete All, names and versions and rating lists decided in inventory §12; the rating anchor (Q1) waits for the maintainer — `R2` (Claude Opus 5 — High); then 1.1.2–1.1.4 and 1.2, each `R2`. **2.1** — skeleton — `I2` (Claude Opus 5 — High) may start at the same time |
+| Confirmed decisions | PLAN §G2 (2026-09-27): design first; a client of the CLI over its protocol; TypeScript + React with shadcn/ui on Radix and Tailwind; the shell a measured choice at 2.3 between Electron and Tauri 2 with Electron the default expectation; placement off, several tournaments at once; 64 participants the design point; lifecycle and close behaviour decided at 4.2 with *stop now on close* the starting preference; amendments and changed engines are CLI mechanisms; run file per tournament, rebuildable index, positions as FEN, no chess logic here; the 1.x library imported, 1.x tournaments not migrated; both themes equal. Repository tools in platform-neutral Python, developed on Windows for now (PLAN §G4 *Tooling*, 2026-11-14) |
 
 ## Current model mapping
 
@@ -53,7 +53,7 @@ specification and exit; `(Mn)` marks a joint milestone.
 - [x] **0.1** Decide the split: 1.x maintained here in `legacy/`, the swap at the split, the release order, frozen duplicates of the CLI crates; ADR-0001, PLAN §G8 and §G9, `AGENTS.md`. The maintainer chose the baseline (`8fa63cc`), the swap now, `legacy/` and a plain copy on 2026-11-13 — DONE 2026-11-13
     - [x] Revised the same day, before it was acted on: plain `vX.Y.Z` tags with no bridge (1.1.0 copies not offered 1.2.0, accepted), squash pull requests into `master` as Rarog delivers — DONE 2026-11-13
 - [x] **0.2** 1.x in `legacy/`: plain copy of CLI `main` at `8fa63cc` (GUI crate, `colosseum-application`, `-core`, `-engine`, `-uci`), release tooling reduced to the GUI and `vX.Y.Z` tags, packaging, CI and release lane rooted at `legacy/` and gating `master`, changelog, a user-facing `README.md`. In `legacy/`: fmt and clippy clean, 342 tests passed; `cargo xtask package gui --format zip` built and smoke-tested the Windows x64 zip; both workflows parse — DONE 2026-11-13
-- [ ] **0.3** 1.2.0: the update check on plain `vX.Y.Z` tags, version and dated changelog; `release-check v1.2.0` passes but for the tag's place; the split's pull request green in CI and Release. Done locally 2026-11-13: fmt and clippy clean, 344 tests passed, `cargo xtask release-check v1.2.0` passed; waiting for the pull request's CI and Release — **IN PROGRESS / I1**
+- [x] **0.3** 1.2.0: the update check on plain `vX.Y.Z` tags, version and dated changelog; `release-check v1.2.0` passes but for the tag's place; the split's pull request green in CI and Release. In `legacy/`: fmt and clippy clean, 344 tests passed, `cargo xtask release-check v1.2.0` passed; pull request 1 green in CI (run 43512846336) and Release (run 43512846315, every build and the complete matrix), merged 2026-11-13 — DONE 2026-11-14
 
 ### Phase 1 — Design foundations (documents only; sign-offs in pairs)
 
@@ -95,7 +95,9 @@ specification and exit; `(Mn)` marks a joint milestone.
 
 ## What to do now
 
-**Finish the split first (0.2, then the CLI repository and the swap).**
+**Release 1.2.0 first** (the maintainer): `master` protected as
+*Repository settings* says, then *Cutting a 1.x release*; then the CLI
+repository's clean-up (PLAN §G8 *Order* 3) and Rarog's CLI download address.
 Then **decide 1.1.1–1.1.4, then write 1.2; 2.1 beside them.** The inventory
 draft (1.1) is written; its fourteen questions for this repository are
 steps 1.1.1–1.1.4, each answered, dated, in inventory §12. 1.2 carries the
@@ -134,14 +136,20 @@ binding repository workflow.
 - One larger piece of work per short-lived branch, its step commits on it;
   merge `master` into the branch first if `master` moved.
 - The title and description become the squash commit (`AGENTS.md`, *Pull
-  requests*). CI and Release run on it; squash-merge once both are green,
-  then delete the branch.
+  requests*). CI and Release run on it; squash-merge once both are green
+  (the merge box is already filled from the title and description; check
+  it, do not retype it). GitHub deletes the branch; delete the local one.
+- If `master` moved, press *Update branch* on the pull request (a merge of
+  `master` into the branch) or merge it locally; never rebase a pushed
+  branch.
 
 ### Cutting a 1.x release (maintainer, until 2.0.0)
 
-- On a release branch: date `legacy/CHANGELOG.md`'s section and set the
-  version in `legacy/crates/colosseum-gui/Cargo.toml`. Its pull request,
-  titled `Release X.Y.Z`, runs the release check and the full candidate.
+- On a release branch: date `legacy/CHANGELOG.md`'s section, add its link
+  at the bottom, and set the version in
+  `legacy/crates/colosseum-gui/Cargo.toml` (and `legacy/Cargo.lock`). Its
+  pull request, titled `Release X.Y.Z`, runs the release check and the full
+  candidate.
 - On the merged `master`:
 
   ```
@@ -153,9 +161,38 @@ binding repository workflow.
   git push origin vX.Y.Z
   ```
 
-- Watch the release workflow; check the release page and the update offer
-  from the previous 1.x. A failed run is repaired by deleting the tag,
-  fixing `master` and tagging again.
+- Watch the release workflow (`gh run watch`); it publishes only once every
+  build has passed. Check the release page and the update offer from the
+  previous 1.x.
+- A failed run is repaired by deleting the tag
+  (`git push origin :refs/tags/vX.Y.Z; git tag -d vX.Y.Z`), fixing `master`
+  by pull request and tagging again.
+
+### Repository settings (maintainer)
+
+The settings that make the flow above the only one possible. Check them
+after any change to the workflows' job names.
+
+- **Settings → General → Pull Requests:** *Allow squash merging* only
+  (merge commits and rebase merging off), its default message *Pull request
+  title and description*; *Always suggest updating pull request branches*
+  on; *Automatically delete head branches* on.
+- **Settings → General → Features:** Wiki and Projects off.
+- **Settings → Rules → Rulesets → New branch ruleset** `master`:
+  enforcement *Active*, no bypass list, target the default branch; *Restrict
+  deletions*, *Require linear history*, *Require a pull request before
+  merging* (0 approvals, allowed merge method *Squash*), *Require status
+  checks to pass* (branches up to date; `CI complete` and `Verify the
+  complete matrix`), *Block force pushes*. 2.1 adds its own completion
+  check to the list.
+- **Settings → Rules → Rulesets → New tag ruleset** `release tags`:
+  enforcement *Active*, target `v*`; *Restrict updates*, so a release tag
+  is never moved (deleting one to repair a failed run stays possible).
+- **Settings → Actions → General:** workflow permissions *Read repository
+  contents*, and Actions may not create or approve pull requests (the
+  release job asks for write access itself).
+- **About** (the repository's front page): description *Run and watch
+  tournaments between UCI chess engines*.
 
 ### Cutting a release (maintainer)
 
