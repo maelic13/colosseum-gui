@@ -62,6 +62,12 @@ The maintainer-facing documents (`PLAN.md`, `GUIDE.md`, this file,
 - **Dependencies where they pay.** Every dependency has a line in
   `docs/dependencies.md` saying why; a dependency that overlaps one already
   taken, or adds weight for little, is refused.
+- **Tools in Python, platform-neutral** (PLAN §G4, *Tooling*). A new
+  repository tool is a Python 3 script, standard library first, that would
+  run unchanged on Linux and macOS: `pathlib` paths, processes started
+  without a shell, no PowerShell or shell scripts beyond a few lines of CI
+  glue. Development runs on Windows for now and only Windows is tested, but
+  nothing may make the move to another machine harder.
 - **`legacy/` is 1.x, frozen.** It receives the fixes 1.x users need and
   nothing else: no feature, and no sync from the CLI's crates unless a 1.x
   fix requires it. The 2.0 application copies nothing from it except assets
