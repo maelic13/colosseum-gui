@@ -178,6 +178,18 @@ both shells, the fallbacks are Qt/QML and then Flutter, each measured the
 same way before anything is built. The process boundary means none of this
 touches the CLI.
 
+**Tooling** (maintainer decision 2026-11-14). The repository's own tools —
+release, packaging and fixture helpers, diagnostics, measurement and
+checks, anything run as `python tools/…` — are written in Python 3,
+standard library first, so that moving development from Windows to Linux
+or macOS is a change of machine and not a rewrite. Development and every
+local check run on Windows for now and only Windows is exercised, but no
+tool assumes it: paths through `pathlib`, processes without a shell,
+no PowerShell or POSIX-shell scripts beyond a few lines of CI glue, no
+reliance on Windows-only programs. What the front-end stack runs itself
+(its package scripts, bundler and test runners) stays in that stack.
+`legacy/` keeps its Rust `xtask` and PowerShell smoke script unchanged.
+
 **Why not the Rust-native toolkits** is recorded in Colosseum's
 `docs/architecture/gui-v2-research.md` §4 and §5.
 
