@@ -7,7 +7,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $archivePath = (Resolve-Path $Archive).Path
-$scratch = Join-Path ([System.IO.Path]::GetTempPath()) ("colosseum-gui-smoke-" + [guid]::NewGuid())
+$scratch = Join-Path ([System.IO.Path]::GetTempPath()) ("colosseum-smoke-" + [guid]::NewGuid())
 New-Item -ItemType Directory -Path $scratch | Out-Null
 try {
     if ($archivePath.EndsWith(".zip", [StringComparison]::OrdinalIgnoreCase)) {
@@ -16,7 +16,7 @@ try {
         & tar -xzf $archivePath -C $scratch
         if ($LASTEXITCODE -ne 0) { throw "tar failed with exit code $LASTEXITCODE" }
     }
-    $name = "colosseum-gui-$Version-$Platform-$Architecture"
+    $name = "colosseum-$Version-$Platform-$Architecture"
     $root = Join-Path $scratch $name
     $binaryName = if ($Platform -eq "windows") { "colosseum.exe" } else { "colosseum" }
     $binary = Join-Path $root $binaryName

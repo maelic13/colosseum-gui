@@ -31,14 +31,14 @@ and download the file for your machine.
 
 | Platform | File | How to install |
 |---|---|---|
-| Windows, Intel or AMD | `colosseum-gui-…-windows-x64.msi` | Double-click and follow the installer |
-| Windows, Arm (Snapdragon) | `colosseum-gui-…-windows-arm64.msi` | Double-click and follow the installer |
-| Windows, no installer | `colosseum-gui-…-windows-….zip` | Unzip and run `colosseum.exe` |
-| Ubuntu, Debian, Mint, Pop!_OS | `colosseum-gui-…-linux-x64.deb` | `sudo apt install ./colosseum-gui-….deb` |
-| Fedora, RHEL, openSUSE | `colosseum-gui-…-linux-x64.rpm` | `sudo dnf install ./colosseum-gui-….rpm` |
-| Arch, CachyOS, EndeavourOS, Manjaro | `colosseum-gui-…-linux-x64.pkg.tar.zst` | `sudo pacman -U ./colosseum-gui-….pkg.tar.zst` |
-| Other Linux | `colosseum-gui-…-linux-x64.tar.gz` | Extract and run `./colosseum` |
-| macOS, Apple Silicon | `colosseum-gui-…-macos-arm64.dmg` | Open and drag Colosseum to Applications |
+| Windows, Intel or AMD | `colosseum-…-windows-x64.msi` | Double-click and follow the installer |
+| Windows, Arm (Snapdragon) | `colosseum-…-windows-arm64.msi` | Double-click and follow the installer |
+| Windows, no installer | `colosseum-…-windows-….zip` | Unzip and run `colosseum.exe` |
+| Ubuntu, Debian, Mint, Pop!_OS | `colosseum-…-linux-x64.deb` | `sudo apt install ./colosseum-….deb` |
+| Fedora, RHEL, openSUSE | `colosseum-…-linux-x64.rpm` | `sudo dnf install ./colosseum-….rpm` |
+| Arch, CachyOS, EndeavourOS, Manjaro | `colosseum-…-linux-x64.pkg.tar.zst` | `sudo pacman -U ./colosseum-….pkg.tar.zst` |
+| Other Linux | `colosseum-…-linux-x64.tar.gz` | Extract and run `./colosseum` |
+| macOS, Apple Silicon | `colosseum-…-macos-arm64.dmg` | Open and drag Colosseum to Applications |
 
 Intel Macs are not supported. The macOS app is not signed, so the first launch
 is blocked: open **System Settings → Privacy & Security** and click
@@ -51,9 +51,9 @@ To check a download arrived intact, compare its SHA-256 with the digest GitHub
 shows beside that asset on the release page:
 
 ```text
-Get-FileHash colosseum-gui-1.2.0-windows-x64.msi
-sha256sum colosseum-gui-1.2.0-linux-x64.deb
-shasum -a 256 colosseum-gui-1.2.0-macos-arm64.dmg
+Get-FileHash colosseum-1.2.0-windows-x64.msi
+sha256sum colosseum-1.2.0-linux-x64.deb
+shasum -a 256 colosseum-1.2.0-macos-arm64.dmg
 ```
 
 The three lines are Windows, Linux and macOS respectively.
