@@ -2,7 +2,7 @@
 
 > **Seed.** Written in the CLI repository (`docs/gui-v2/PLAN.md`) and
 > committed as this repository's root `PLAN.md` at CLI step 11.2, under the
-> names CLI step 11.1 decided ([CLI ADR-0012](https://github.com/maelic13/colosseum/blob/main/docs/architecture/adr/0012-names-and-repositories-after-the-split.md)).
+> names CLI step 11.1 decided ([CLI ADR-0012](https://github.com/maelic13/colosseum-cli/blob/dev/docs/architecture/adr/0012-names-and-repositories-after-the-split.md)).
 > A step number prefixed `CLI` is the CLI repository's. This file is
 > maintainer-facing: it holds the binding requirements, the architecture,
 > the specifications each step fills in, and the open work. `GUIDE.md` is
@@ -19,7 +19,7 @@ starts the CLI as a child process and talks to it through the CLI's
 front-end protocol, the way a chess GUI talks to a UCI engine. Everything
 that plays or scores a game is the CLI's; everything the user sees, and the
 user's own data, is this application's
-([CLI ADR-0011](https://github.com/maelic13/colosseum/blob/main/docs/architecture/adr/0011-desktop-application-as-separate-cli-client.md)).
+([CLI ADR-0011](https://github.com/maelic13/colosseum-cli/blob/dev/docs/architecture/adr/0011-desktop-application-as-separate-cli-client.md)).
 
 Not in scope: the CLI's own workflows (matches, SPRT gates, SPSA tunes,
 position suites, calibration) are not shown here; there is no served
@@ -281,17 +281,19 @@ product rules across.
   1. *The split* (0.1–0.3; M8). 1.x moves into `legacy/` here, builds, tests
      and packages, and becomes 1.2.0 with an update check on `v` tags. The
      work reaches `master` by pull request.
-  2. *The swap*, by the maintainer. Rename the CLI repository
-     `maelic13/colosseum` to `maelic13/colosseum-cli`, then at once this
-     repository `maelic13/colosseum-gui` to `maelic13/colosseum`. Taking the
-     name ends GitHub's redirect for the old address, so the same day every
-     clone points its `origin` at the new address, Rarog's CLI download
-     address moves, and every link to the CLI repository in this
-     repository's documents moves to `maelic13/colosseum-cli`.
+  2. *The swap*, by the maintainer, done 2026-11-13: the CLI repository is
+     `maelic13/colosseum-cli` (its `main` renamed `master`), this one
+     `maelic13/colosseum`. Taking the name ended GitHub's redirect for the
+     old address, so every clone points its `origin` at the new address,
+     Rarog's CLI download address (`tools/colosseum/colosseum.pin.json`)
+     moves, and every link to the CLI repository here names
+     `maelic13/colosseum-cli` (moved 2026-11-14).
   3. *1.2.0 from here*, soon after the swap: the first release of this
-     repository. Then the maintainer deletes the desktop releases and tags
-     from `maelic13/colosseum-cli`, whose `dev` is brought up to date and
-     merged into its `main` without the GUI (the CLI repository's work).
+     repository, once `master` is protected (`GUIDE.md`, *Repository
+     settings*). Then the maintainer deletes the desktop releases and tags
+     from `maelic13/colosseum-cli` (`v1.0.0` to `v1.0.2`, `gui-v1.1.0`),
+     whose `dev` is brought up to date and merged into its `master` without
+     the GUI (the CLI repository's work).
   4. *The end of the programme*: the CLI release candidate (CLI 13.8) and
      this application accepted against it (4.8, M7); the CLI release that
      carries the protocol, from `maelic13/colosseum-cli`; then 2.0.0, pinned
@@ -353,7 +355,7 @@ reason; the recommendation never changes the active model by itself.
 | M5 | Live events and control | 13.3, 13.4 | 4.5 on the real CLI; 4.2's lifecycle decision with 13.4 |
 | M6 | Amendments, changed engines, queries | 13.5–13.7 | 4.6 |
 | M7 | CLI release candidate | 13.8, from `dev` | 4.8 acceptance against it |
-| M8 | The split and the swap (ADR-0001, moved from the end) | the swap; `dev` up to date and into `main`, without the GUI; desktop releases deleted after 1.2.0 | 0.2–0.3: 1.x in `legacy/` as 1.2.0; takes `maelic13/colosseum`; 1.2.0 released here |
+| M8 | The split and the swap (ADR-0001, moved from the end) | the swap; `dev` up to date and into `master`, without the GUI; desktop releases deleted after 1.2.0 | 0.2–0.3: 1.x in `legacy/` as 1.2.0; takes `maelic13/colosseum`; 1.2.0 released here |
 | M9 | Releases in quick succession | 14.2: the CLI release | 5.1, pinned to it; `legacy/` removed |
 
 ### Phase 0 — The split (ADR-0001)

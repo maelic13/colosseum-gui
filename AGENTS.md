@@ -18,21 +18,28 @@ the command-line tool **Colosseum CLI** (`colosseum-cli`). A step number
 prefixed `CLI` (`CLI 11.4`) is the CLI repository's; a bare number is a step
 here.
 
-| Repository | Until the swap | After the swap (at the split, ADR-0001) |
+| Repository | Address | Before the swap of 2026-11-13 (ADR-0001) |
 |---|---|---|
-| This one | `maelic13/colosseum-gui` | `maelic13/colosseum` |
-| The CLI's | `maelic13/colosseum` | `maelic13/colosseum-cli` |
+| This one | `maelic13/colosseum` | `maelic13/colosseum-gui` |
+| The CLI's | `maelic13/colosseum-cli` | `maelic13/colosseum` |
 
 This repository holds both desktop generations until 2.0.0: the 1.x
 application (Rust, egui) in `legacy/`, maintained and released from here,
 and the 2.0 application being designed. Releases are plain `vX.Y.Z` tags on
 `master`. `master` is the trunk: work reaches it as squash pull requests
-from short-lived branches (*Pull requests* below). The swap, the release
-order and the same-day checklist are in PLAN §G8 and
+from short-lived branches (*Pull requests* below). The swap and the release
+order are in PLAN §G8 and
 [ADR-0001](docs/architecture/adr/0001-1x-maintained-here-and-the-swap-at-the-split.md),
 which moved the swap of
-[CLI ADR-0012](https://github.com/maelic13/colosseum/blob/dev/docs/architecture/adr/0012-names-and-repositories-after-the-split.md)
+[CLI ADR-0012](https://github.com/maelic13/colosseum-cli/blob/dev/docs/architecture/adr/0012-names-and-repositories-after-the-split.md)
 to the split.
+
+**What users read is about the desktop application only.** `README.md`,
+the changelogs and the release notes cut from them do not mention the CLI,
+except the one short paragraph near the top of `README.md` that points to
+`maelic13/colosseum-cli`, until the application itself uses the CLI (2.0).
+The maintainer-facing documents (`PLAN.md`, `GUIDE.md`, this file,
+`docs/`) speak of the CLI freely.
 
 ## Scope and architecture
 
@@ -69,10 +76,25 @@ to the split.
 
 One numbered `GUIDE.md` item is the normal unit of work.
 
-Agents work locally only: create the required commits, but never push,
-fetch, create tags, releases or pull requests, or perform other remote
-operations. The maintainer owns every remote operation. An agent may draft
-a pull request's title and description for the maintainer to use.
+### Remote operations
+
+An agent may perform remote operations that can be undone: fetch, push its
+own work branches, open and update pull requests (title and description as
+below), read CI runs, logs, releases and repository settings, and re-run a
+failed workflow.
+
+Anything that cannot be undone, or that others see as final, waits for the
+maintainer's explicit go-ahead for that one action, asked in chat with what
+it will do:
+
+- force-pushing, or otherwise rewriting history that has left this
+  machine;
+- deleting a remote branch, tag or release (GitHub's automatic deletion of
+  a merged pull request's branch excepted);
+- merging into `master`, pushing a release tag or publishing a release;
+- changing the repository's settings, branch rules or secrets.
+
+`master` takes no direct push; everything reaches it by pull request.
 
 ### Pull requests
 
@@ -80,8 +102,10 @@ a pull request's title and description for the maintainer to use.
 group of steps) lives on its own short-lived branch with its step commits,
 and reaches `master` as one squash commit through a pull request the
 maintainer merges once CI and Release are green. Merge `master` into the
-branch first if it moved. The title and description become the squash
-commit's message, as Rarog writes them:
+branch first if it moved; never rebase a branch that has been pushed. The
+title and description become the squash commit's message, as Rarog writes
+them (the repository fills the squash message from them, `GUIDE.md`,
+*Repository settings*):
 
 - **Title:** a short imperative saying what changed for the product
   ("Move the 1.x application here and release it as 1.2.0"); no step
@@ -124,7 +148,9 @@ Do not:
 - combine independently completable steps in one commit;
 - mark or commit an incomplete step as done;
 - amend, rewrite, reset or discard user commits or changes unless asked;
-- add `Co-authored-by`, assistant attribution or other authorship trailers;
+- add `Co-authored-by`, assistant attribution or other authorship trailers,
+  in commits, pull request titles and descriptions or files
+  (`.claude/settings.json` turns Claude Code's own attribution off);
 - begin the next numbered step until the current step's commit succeeds.
 
 If a step is blocked, leave it unchecked, document the blocker, and do not
@@ -155,5 +181,6 @@ A change under `legacy/` runs, in `legacy/`: `cargo fmt --all --check`,
   dated amendment.
 - `docs/architecture/adr/`: decisions, numbered from 0001 in this repository.
 - `docs/dependencies.md`: every dependency with one line of reason.
-- `README.md` and `CHANGELOG.md`: user-facing; no phase numbers or internal
-  argumentation.
+- `README.md` and the changelog (`legacy/CHANGELOG.md` for 1.x,
+  `CHANGELOG.md` from 2.0): user-facing; short and plain, no phase numbers,
+  internal argumentation or mention of the CLI (*What this repository is*).

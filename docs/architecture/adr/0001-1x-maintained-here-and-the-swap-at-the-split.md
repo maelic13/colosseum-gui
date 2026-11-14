@@ -6,7 +6,7 @@
   delivers (decisions 4, 6 and 8)
 - **Date:** 2026-11-13
 - **Supersedes:** in the CLI repository's
-  [ADR-0012](https://github.com/maelic13/colosseum/blob/dev/docs/architecture/adr/0012-names-and-repositories-after-the-split.md),
+  [ADR-0012](https://github.com/maelic13/colosseum-cli/blob/dev/docs/architecture/adr/0012-names-and-repositories-after-the-split.md),
   the timing of the swap (*Branches and order*), the bridge release, *No 1.x
   patch after the swap*, and the 1.x half of *The 1.x releases and tags are
   deleted*. Its names are kept unchanged

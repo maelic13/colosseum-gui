@@ -17,11 +17,12 @@ game, and resumes an interrupted tournament. It works with any ordinary
 [UCI](https://www.shredderchess.com/chess-info/features/uci-universal-chess-interface.html)
 engine; no manifest or source access is needed.
 
-![Colosseum — Arena tab with live game view](docs/assets/screenshot.png)
+Looking for the command-line tool? [Colosseum CLI](https://github.com/maelic13/colosseum-cli)
+is a separate program for engine developers: it plays matches and
+tournaments in a terminal or a script, tells you with SPRT whether a
+change made an engine stronger, tunes parameters and measures speed.
 
-Developing an engine and need to know whether a change helped? That is
-[Colosseum CLI](https://github.com/maelic13/colosseum-cli): gates, SPRT,
-tuning and speed measurement from the command line.
+![Colosseum — Arena tab with live game view](docs/assets/screenshot.png)
 
 ## Install
 
@@ -90,8 +91,8 @@ Start Colosseum with `--portable` to keep everything next to the program.
 
 ## What changed
 
-See the [changelog](legacy/CHANGELOG.md). Colosseum 2.0, a new application
-built on Colosseum CLI, is in development in this repository.
+See the [changelog](legacy/CHANGELOG.md). Colosseum 2.0, a new version of
+the application, is in development in this repository.
 
 ## Building from source
 
